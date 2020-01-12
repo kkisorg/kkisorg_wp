@@ -1,0 +1,78 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: metaslider_schedule_slides 1.0\n"
+"POT-Creation-Date: 2016-12-26 15:58+0200\n"
+"PO-Revision-Date: 2016-12-26 15:59+0200\n"
+"Last-Translator: \n"
+"Language-Team: Marc Lacroix\n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../meta-slider-schedule-slides.php:133
+msgid "Schedule"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:138
+msgid "Hide slide"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:139
+msgid "Slide Title (Admin only)"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:155
+msgid "Schedule slide"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:158
+#: ../meta-slider-schedule-slides.php:160
+msgid "From"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:163
+#: ../meta-slider-schedule-slides.php:165
+msgid "To"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:235
+msgid "Month"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:241
+#, php-format
+msgid "%1$s-%2$s"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:245
+msgid "Day"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:246
+msgid "Year"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:247
+msgid "Hour"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:248
+msgid "Minute"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:252
+#, php-format
+msgid "%1$s %2$s, %3$s @ %4$s:%5$s"
+msgstr ""
+
+#: ../meta-slider-schedule-slides.php:268
+msgid ""
+"Meta Slider Schedule Slides could not be loaded because the plugin "
+"<strong>MetaSlider</strong> wasn't found."
+msgstr ""
