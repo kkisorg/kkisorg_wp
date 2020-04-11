@@ -240,31 +240,6 @@ function tag_Delay(&$content, $message_date, $config) {
     return array($corrected_date->format(DATE_W3C), $delay);
 }
 
-/**
- * This function takes the content of the message - looks for a subject at the beginning surrounded by # and then removes that from the content
- */
-function tag_Subject($content, $defaultTitle) {
-    DebugEcho("tag_Subject: Looking for subject in email body");
-    if (substr($content, 0, 1) != "#") {
-        DebugEcho("tag_Subject: No inline subject found, using supplied default [1] '$defaultTitle'");
-        return(array($defaultTitle, $content));
-    }
-    //make sure the first line isn't #img
-    if (strtolower(substr($content, 1, 3)) != "img") {
-        $subjectEndIndex = strpos($content, "#", 1);
-        if (!$subjectEndIndex > 0) {
-            DebugEcho("tag_Subject: No subject found, using default [2]");
-            return(array($defaultTitle, $content));
-        }
-        $subject = substr($content, 1, $subjectEndIndex - 1);
-        $content = substr($content, $subjectEndIndex + 1, strlen($content));
-        DebugEcho("tag_Subject: Subject found in body: $subject");
-        return array($subject, $content);
-    } else {
-        return(array($defaultTitle, $content));
-    }
-}
-
 function tag_Excerpt(&$content, $config) {
     $post_excerpt = '';
     $matches = array();
@@ -456,7 +431,7 @@ function tag_Tags(&$content, $config) {
     foreach (postie_content_lines($content, $config) as $line) {
         //DebugEcho("tag_Tags: line: $line");
         $matches = array();
-        if (preg_match('/^\s*tags:\s*(.*)/imu', $line, $matches)) {
+            if (preg_match('/^\s*tags:\s*(.*)/imu', $line, $matches)) {
             if (!empty($matches[1])) {
                 DebugEcho("tag_Tags: Found tags: $matches[1]");
                 $content = str_replace($matches[0], "", $content);

@@ -43,7 +43,8 @@ class GeneralPlaceholders
             '{tagline}' => get_bloginfo('description'),
             '{siteurl}' => get_bloginfo('wpurl'),
             '{homeurl}' => get_bloginfo('url'),
-            '{admin_email}' => get_bloginfo('admin_email'),
+			'{admin_email}' => get_bloginfo('admin_email'),
+			'{entryCounter}' => 'KaliForms\Inc\Utils\General_Placeholders_Helper::count_form_entries',
         ];
 
         $this->general_placeholders = array_merge($this->general_placeholders, $placeholders);

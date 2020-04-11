@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 
 const HubSpotProperties = (props) => {
 	const properties = [...KaliFormsHubSpot.fieldMapProperties[0].fields, ...KaliFormsHubSpot.fieldMapProperties[1].fields]
+	
 	return (
 		<TextField
 			label={props.label}

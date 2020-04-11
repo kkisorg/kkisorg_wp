@@ -6,8 +6,8 @@ Plugin URI: http://PostiePlugin.com/
 Tags: e-mail, email, post-by-email
 Requires PHP: 5.3
 Requires at least: 4.0
-Tested up to: 5.3
-Stable tag: 1.9.40
+Tested up to: 5.4
+Stable tag: 1.9.45
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -107,6 +107,23 @@ All script, style and body tags are stripped from html emails.
 Attachments are now processed in the order they were attached.
 
 == CHANGELOG ==
+= 1.9.45 (2020-03-29) =
+* Fix email notification bug
+
+= 1.9.44 (2020-03-23) =
+* refactoring to separate email fetch from email processing
+* add postie_register_shortcode_pre action for registering Postie shortcodes
+
+= 1.9.43 (2020-02-18) =
+* Begin migration of shortcode support into Postie main
+
+= 1.9.42 (2020-02-18) =
+* Fix: signature stripping in html emails was failing sometimes
+
+= 1.9.41 (2020-02-01) =
+* Fix: different regex approach for html vs plain
+* Only process 1 email at a time
+
 = 1.9.40 (2019-11-13) =
 * Fix issue with class-oembed.php upgrade
 

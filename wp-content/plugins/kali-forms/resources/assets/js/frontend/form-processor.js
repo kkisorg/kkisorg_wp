@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Qs from 'qs';
+import maskInput from 'vanilla-text-mask'
 import * as FilePond from 'filepond';
 import FilePondPluginFileRename from 'filepond-plugin-file-rename';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
@@ -44,6 +45,15 @@ export default class FormProcessor {
 		if (this.grecaptcha) {
 			checks = { ...checks, recaptcha: this.grecaptchaValidation }
 		}
+		if (this.editors.length) {
+			this.editors.map(e => {
+				let required = e.getAttribute('data-was-required');
+				if (required === 'true' && e.value === '') {
+					checks.formValidation = false;
+				}
+			})
+		}
+
 		return this.grecaptcha ? (checks.formValidation && checks.recaptcha) : checks.formValidation
 	}
 
@@ -54,16 +64,24 @@ export default class FormProcessor {
 	 */
 	constructor(nodeElement) {
 		this.id = nodeElement.getAttribute('id');
+		this.style = nodeElement.getAttribute('data-form-style');
 		this.formId = parseInt(nodeElement.getAttribute('data-form-id'));
 		this.form = nodeElement;
 		this.formElements = this.form.elements;
 		this.uploadFields = [];
+		this.editors = [];
 		this.nonce = KaliFormsObject.ajax_nonce;
 
 		// AJAX RELATED
 		this.axios = axios;
 		this.Qs = Qs;
 
+		// Enable styling
+		this.enableStyling();
+
+		// Enable javascript
+		this.handleEditors();
+		this.handleInputMasks();
 		this.handleFileUploads();
 		this.handleRecaptcha();
 		this.handleSubmit();
@@ -74,6 +92,116 @@ export default class FormProcessor {
 		}
 
 		document.dispatchEvent(new CustomEvent('kaliFormProcessConstructed', { detail: this }))
+	}
+
+	/**
+	 * Formats the element as we need them
+	 */
+	enableStyling() {
+		switch (this.style) {
+			case 'inputLabelMerge':
+				[...this.formElements].map(e => {
+					if (e.tagName === 'BUTTON') {
+						return;
+					}
+					if (['hidden', 'checkbox', 'radio', 'button', 'submit', 'file'].includes(e.getAttribute('type'))) {
+						return
+					}
+
+					const wrapper = this.wrapAll(e.parentNode)
+					wrapper.classList.add(this.style);
+				});
+				break;
+			case 'inputLabelMergeOverlap':
+				[...this.formElements].map(e => {
+					if (e.tagName === 'BUTTON') {
+						return;
+					}
+					
+					if (['hidden', 'button', 'submit', 'file'].includes(e.getAttribute('type'))) {
+						return
+					}
+					if (['checkbox', 'radio'].includes(e.getAttribute('type'))) {
+						const parentNode = e.parentNode.parentNode;
+						if (parentNode.classList.contains(this.style)) {
+							return;
+						}
+
+						const wrapper = this.wrapAll(e.parentNode.parentNode)
+						wrapper.classList.add(this.style);
+						wrapper.classList.add('checkbox-radio');
+						return;
+					}
+
+					const wrapper = this.wrapAll(e.parentNode)
+					wrapper.classList.add(this.style);
+				});
+				break;
+			default: break;
+		}
+	}
+	/**
+	 *
+	 * @param {DOMElement} target
+	 * @param {DOMElement} wrapper
+	 */
+	wrapAll(target, wrapper = document.createElement('div')) {
+		[...target.childNodes].forEach(child => wrapper.appendChild(child))
+		target.appendChild(wrapper)
+		return wrapper
+	}
+	/**
+	 * Handle editors
+	 */
+	handleEditors() {
+		if (!window.hasOwnProperty('wp') || !wp.hasOwnProperty('editor') || typeof wp.editor.getDefaultSettings !== 'function') {
+			return;
+		}
+		let fields = this.form.querySelectorAll('textarea[editor]');
+
+		[...fields].map(e => {
+			let id = e.getAttribute('id');
+			if (id === null) {
+				id = e.getAttribute('data-internal-id')
+				e.setAttribute('id', id)
+			}
+			e.setAttribute('data-was-required', e.hasAttribute('required') ? true : false);
+			e.removeAttribute('required');
+			this.editors.push(e);
+			wp.editor.initialize(id, {
+				tinymce: {
+					wpautop: true,
+					plugins: 'charmap colorpicker compat3x directionality fullscreen hr image lists media paste tabfocus textcolor wordpress wpautoresize wpdialogs wpeditimage wpemoji wpgallery wplink wptextpattern wpview',
+					toolbar1: 'formatselect bold italic | bullist numlist | blockquote | alignleft aligncenter alignright | link unlink | spellchecker',
+					setup: editor => editor.on('change', () => editor.save()),
+				},
+				quicktags: true,
+			})
+		})
+	}
+
+	/**
+	 * Adds input masks where needed
+	 */
+	handleInputMasks() {
+		let fields = this.form.querySelectorAll("[data-format]");
+
+		let masks = {
+			'us': ['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+			'usWithCode': ['+', '1', ' ', /[1-9]/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/],
+		};
+
+		[...fields].map(field => {
+			let mask = field.getAttribute('data-format');
+			if (masks.hasOwnProperty(mask)) {
+				maskInput({
+					inputElement: field,
+					mask: masks[mask],
+					guide: true,
+					showMask: true,
+				})
+			}
+		});
 	}
 
 	/**

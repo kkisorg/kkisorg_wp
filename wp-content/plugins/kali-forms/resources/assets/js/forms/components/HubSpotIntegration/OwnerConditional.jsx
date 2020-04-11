@@ -29,7 +29,7 @@ const OwnerConditional = (props) => {
 						select
 						onChange={e => props.changeCondition({ index: props.idx, key: 'condition', value: e.target.value })}
 						fullWidth={true}>
-						{props.fieldComponents.map(field => {
+						{store._FIELD_COMPONENTS_.fieldComponents.map(field => {
 							if (
 								(field.properties.name !== '')
 								&& (field.id === 'checkbox'

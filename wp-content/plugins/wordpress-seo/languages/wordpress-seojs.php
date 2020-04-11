@@ -29,7 +29,8 @@ $generated_i18n_strings = array(
 	__( 'Get the %s plugin now', 'wordpress-seo' ),
 
 	// Reference: js/src/components/Metabox.js:57
-	__( 'Snippet Preview', 'wordpress-seo' ),
+	// Reference: js/src/components/SnippetPreviewModal.js:53
+	__( 'Google preview', 'wordpress-seo' ),
 
 	// Reference: js/src/components/PrimaryTaxonomyFilter.js:80
 	__( 'An error occurred loading the %s primary taxonomy picker.', 'wordpress-seo' ),
@@ -42,9 +43,6 @@ $generated_i18n_strings = array(
 
 	// Reference: js/src/components/SettingsReplacementVariableEditor.js:35
 	__( 'Modify your meta description by editing it right here', 'wordpress-seo' ),
-
-	// Reference: js/src/components/SnippetPreviewModal.js:53
-	__( 'Snippet preview', 'wordpress-seo' ),
 
 	// Reference: js/src/components/SnippetPreviewModal.js:59
 	// Reference: js/src/components/modals/Modal.js:78
@@ -154,16 +152,16 @@ $generated_i18n_strings = array(
 	// Reference: js/src/help-scout-beacon.js:203
 	__( 'When you click OK we will open our HelpScout beacon where you can find answers to your questions. This beacon will load our support data and also potentially set cookies.', 'wordpress-seo' ),
 
-	// Reference: js/src/structured-data-blocks/faq/block.js:13
+	// Reference: js/src/structured-data-blocks/faq/block.js:23
 	__( 'List your Frequently Asked Questions in an SEO-friendly way. You can only use one FAQ block per post.', 'wordpress-seo' ),
 
-	// Reference: js/src/structured-data-blocks/faq/block.js:17
+	// Reference: js/src/structured-data-blocks/faq/block.js:27
 	__( 'FAQ', 'wordpress-seo' ),
 
-	// Reference: js/src/structured-data-blocks/faq/block.js:18
+	// Reference: js/src/structured-data-blocks/faq/block.js:28
 	__( 'Frequently Asked Questions', 'wordpress-seo' ),
 
-	// Reference: js/src/structured-data-blocks/faq/block.js:19
+	// Reference: js/src/structured-data-blocks/faq/block.js:29
 	// Reference: js/src/structured-data-blocks/how-to/block.js:57
 	__( 'Schema', 'wordpress-seo' ),
 

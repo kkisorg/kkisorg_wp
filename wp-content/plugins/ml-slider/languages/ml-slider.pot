@@ -1,4 +1,4 @@
-# Copyright (C) 2019 MetaSlider
+# Copyright (C) 2020 MetaSlider
 # This file is distributed under the same license as the MetaSlider package.
 msgid ""
 msgstr ""
@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
 "Language-Team: Team Updraft <mail@example.com>\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SourceCharset: UTF-8\n"
@@ -16,52 +16,52 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: src/admin/assets/js/admin.js:66
+#: src/admin/assets/js/admin.js:77
 msgid "Preparing %s slide..."
 msgid_plural "Preparing %s slides..."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/admin/assets/js/admin.js:106
+#: src/admin/assets/js/admin.js:120
 msgid "%s slide added successfully"
 msgid_plural "%s slides added successfully"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/admin/assets/js/admin.js:134
+#: src/admin/assets/js/admin.js:157
 msgid "Opening add slide UI..."
 msgstr ""
 
-#: src/admin/assets/js/admin.js:137
+#: src/admin/assets/js/admin.js:160
 msgid "Closing add slide UI..."
 msgstr ""
 
-#: src/admin/assets/js/admin.js:226
+#: src/admin/assets/js/admin.js:249
 msgid "Updating slide..."
 msgstr ""
 
-#: src/admin/assets/js/admin.js:272
+#: src/admin/assets/js/admin.js:295
 msgid "Slide updated successfully"
 msgstr ""
 
-#: src/admin/assets/js/app/globals.js:54
+#: src/admin/assets/js/app/globals.js:86
 msgid "Doing something..."
 msgstr ""
 
-#: src/admin/assets/js/app/globals.js:62
+#: src/admin/assets/js/app/globals.js:94
 msgid "No error message provided."
 msgstr ""
 
-#: src/admin/assets/js/app/globals.js:70, src/admin/Pages.php:70
+#: src/admin/assets/js/app/globals.js:103, src/admin/Pages.php:70
 msgid "Success"
 msgstr ""
 
-#: src/admin/assets/js/app/globals.js:93
-msgid "Error"
+#: src/admin/assets/js/app/globals.js:111
+msgid "Undefined error occurred"
 msgstr ""
 
-#: src/admin/assets/js/app/store/modules/slideshows.js:26
-msgid "Error fetching list of slideshows: %s"
+#: src/admin/assets/js/app/globals.js:168
+msgid "No error message reported."
 msgstr ""
 
 #: src/admin/assets/js/app/tour/main.js:12
@@ -469,23 +469,23 @@ msgstr ""
 msgid "Caution: This setting is for advanced developers only. If you're unsure, leave it checked."
 msgstr ""
 
-#: src/admin/routes/api.php:97
+#: src/admin/routes/api.php:99
 msgid "You do not have access to this resource."
 msgstr ""
 
-#: src/admin/routes/api.php:249
+#: src/admin/routes/api.php:314
 msgid "The request format was not valid."
 msgstr ""
 
-#: src/admin/routes/api.php:257, src/admin/routes/api.php:313
+#: src/admin/routes/api.php:322, src/admin/routes/api.php:376
 msgid "This slideshow is no longer available."
 msgstr ""
 
-#: src/admin/routes/api.php:320
+#: src/admin/routes/api.php:383
 msgid "This was not a slideshow, so we cannot delete it."
 msgstr ""
 
-#: src/admin/routes/api.php:403
+#: src/admin/routes/api.php:462
 msgid "This was not a slideshow, so we cannot update the setting."
 msgstr ""
 
@@ -545,68 +545,68 @@ msgstr ""
 msgid "Copy all"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:28
+#: src/admin/views/pages/parts/toolbar.php:29
 msgid "Add a new slide"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:32
+#: src/admin/views/pages/parts/toolbar.php:33
 msgid "Add Slide"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:35
+#: src/admin/views/pages/parts/toolbar.php:36
 msgid "Save & open preview"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:35
+#: src/admin/views/pages/parts/toolbar.php:36
 msgctxt "This is a keyboard shortcut."
 msgid "(alt + p)"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:39
+#: src/admin/views/pages/parts/toolbar.php:40
 msgid "Preview"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:44
+#: src/admin/views/pages/parts/toolbar.php:45
 msgid "Read the documentation"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:48
+#: src/admin/views/pages/parts/toolbar.php:49
 msgid "Docs"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:53
+#: src/admin/views/pages/parts/toolbar.php:54
 msgid "Add a new slideshow"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:57
+#: src/admin/views/pages/parts/toolbar.php:58
 msgid "New"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:60
+#: src/admin/views/pages/parts/toolbar.php:61
 msgid "Duplicate this slideshow"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:64
+#: src/admin/views/pages/parts/toolbar.php:65
 msgid "Duplicate"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:69
+#: src/admin/views/pages/parts/toolbar.php:70
 msgid "Add custom CSS"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:69
+#: src/admin/views/pages/parts/toolbar.php:70
 msgid "press to learn more"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:73
+#: src/admin/views/pages/parts/toolbar.php:74
 msgid "Add CSS"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:81
+#: src/admin/views/pages/parts/toolbar.php:82
 msgid "Save slideshow"
 msgstr ""
 
-#: src/admin/views/pages/parts/toolbar.php:88
+#: src/admin/views/pages/parts/toolbar.php:89
 msgid "Save"
 msgstr ""
 
@@ -670,7 +670,7 @@ msgstr ""
 msgid "free"
 msgstr ""
 
-#: src/admin/views/pages/upgrade.php:21, src/ml-slider.php:366, src/ml-slider.php:1860
+#: src/admin/views/pages/upgrade.php:21, src/ml-slider.php:366, src/ml-slider.php:1843
 msgid "Add-ons"
 msgstr ""
 
@@ -825,7 +825,7 @@ msgctxt "Keep the plugin name \"UpdraftPlus\" when possible"
 msgid "With a long-standing reputation for excellence and outstanding reviews, it’s no wonder that UpdraftPlus is the world’s most popular WordPress backup plugin."
 msgstr ""
 
-#: src/admin/views/pages/upgrade.php:145, src/admin/views/pages/upgrade.php:157, src/admin/views/pages/upgrade.php:169
+#: src/admin/views/pages/upgrade.php:145, src/admin/views/pages/upgrade.php:157, src/admin/views/pages/upgrade.php:174
 msgid "Try for free"
 msgstr ""
 
@@ -846,7 +846,7 @@ msgstr ""
 
 #: src/admin/views/pages/upgrade.php:155
 msgctxt "Keep the plugin name \"UpdraftCentral\" when possible"
-msgid "UpdraftCentral is a powerful tool that allows you to efficiently manage, update, backup and even restore multiple websites from just one location. You can also manage users and comments on all the sites at once, and through its central login feature, you can access each WP-dashboard with a single click."
+msgid "UpdraftCentral is a powerful tool that allows you to efficiently manage, update, backup multiple websites from just one location. You can also manage users and comments on all the sites at once, and through its central login feature, you can access each WP-dashboard with a single click."
 msgstr ""
 
 #: src/admin/views/pages/upgrade.php:156
@@ -856,22 +856,27 @@ msgstr ""
 
 #: src/admin/views/pages/upgrade.php:165
 msgctxt "Keep the plugin name \"WP-Optimize\" when possible"
-msgid "Wp-Optimize – faster, fitter, cleaner WP sites for optimal performance."
-msgstr ""
-
-#: src/admin/views/pages/upgrade.php:166
-msgctxt "Keep the plugin name \"WP-Optimize\" when possible"
-msgid "WP-Optimize, the #1 optimization plugin, keeps your WordPress site at prime speed by cleaning the database without the need for phpMyAdmin."
+msgid "WP-Optimize - Clean, Compress, Cache."
 msgstr ""
 
 #: src/admin/views/pages/upgrade.php:167
-msgctxt "Keep the plugin name \"WP-Optimize\" when possible"
-msgid "Incredibly simple to use, WP-Optimize clears out old webpage revisions, spam, trash and unapproved comments, all of which take up megabytes of valuable space and leave your database sluggish and ultimately unfit for purpose."
+msgid "It does it in three clever ways:"
 msgstr ""
 
-#: src/admin/views/pages/upgrade.php:168
-msgctxt "ml-slider"
-msgid "WP-Optimize has a load of valuable features, including automated weekly clean up scheduling, the retention of a set number of weeks’ data, a display of how much space can be cleared, the enabling / disabling of trackbacks and comments for all published posts, and an ‘administrators only’ security feature."
+#: src/admin/views/pages/upgrade.php:169
+msgid "It allows you to clean and optimize your database."
+msgstr ""
+
+#: src/admin/views/pages/upgrade.php:170
+msgid "It gives you the option to compress your images."
+msgstr ""
+
+#: src/admin/views/pages/upgrade.php:171
+msgid "It allows you cache your pages, for super fast load times (read more caching information below)."
+msgstr ""
+
+#: src/admin/views/pages/upgrade.php:173
+msgid "Extensive tests show the cache feature alone can make WordPress sites faster than any other caching plugin available. But when you combine the cache with the database and image optimizing features, the difference with alternative solutions is significant."
 msgstr ""
 
 #: src/admin/views/slides/tabs/crop.php:3
@@ -963,6 +968,18 @@ msgstr ""
 msgid "Use the image alt text"
 msgstr ""
 
+#: src/inc/metaslider.systemcheck.class.php:80
+msgid "Your settings might not be saving properly due to a configuration on your server. %s is currently set to %s, but we recommend a setting of 4000. Please see %s for more information. The php.ini file is being loaded from here: %s"
+msgstr ""
+
+#: src/inc/metaslider.systemcheck.class.php:82
+msgid "this article"
+msgstr ""
+
+#: src/inc/metaslider.systemcheck.class.php:192
+msgid "Warning:"
+msgstr ""
+
 #: src/inc/metaslider.widget.class.php:106
 msgid "Title:"
 msgstr ""
@@ -971,7 +988,7 @@ msgstr ""
 msgid "Select Slider:"
 msgstr ""
 
-#: src/inc/metaslider.widget.class.php:119, src/ml-slider.php:1716
+#: src/inc/metaslider.widget.class.php:119, src/ml-slider.php:1699
 msgid "No slideshows found"
 msgstr ""
 
@@ -1079,15 +1096,15 @@ msgstr ""
 msgid "You are viewing slides that have been trashed, which will be automatically deleted in %s days. Click <a href=\"%s\">here</a> to view active slides."
 msgstr ""
 
-#: src/ml-slider.php:1231, src/ml-slider.php:1486
+#: src/ml-slider.php:1231, src/ml-slider.php:1477
 msgid "Width"
 msgstr ""
 
-#: src/ml-slider.php:1234, src/ml-slider.php:1247, src/ml-slider.php:1405
+#: src/ml-slider.php:1234, src/ml-slider.php:1247, src/ml-slider.php:1396
 msgid "px"
 msgstr ""
 
-#: src/ml-slider.php:1244, src/ml-slider.php:1499
+#: src/ml-slider.php:1244, src/ml-slider.php:1490
 msgid "Height"
 msgstr ""
 
@@ -1103,7 +1120,7 @@ msgstr ""
 msgid "Slide transition effect"
 msgstr ""
 
-#: src/ml-slider.php:1257, src/ml-slider.php:1418
+#: src/ml-slider.php:1257, src/ml-slider.php:1409
 msgid "Random"
 msgstr ""
 
@@ -1207,340 +1224,332 @@ msgstr ""
 msgid "Filmstrip"
 msgstr ""
 
-#: src/ml-slider.php:1311
-msgid "Title"
-msgstr ""
-
-#: src/ml-slider.php:1312
-msgid "Slideshow title"
-msgstr ""
-
-#: src/ml-slider.php:1329
+#: src/ml-slider.php:1321
 msgid "View trashed slides"
 msgstr ""
 
-#: src/ml-slider.php:1343
+#: src/ml-slider.php:1334
 msgid "Click to toggle"
 msgstr ""
 
-#: src/ml-slider.php:1343
+#: src/ml-slider.php:1334
 msgid "Advanced Settings"
 msgstr ""
 
-#: src/ml-slider.php:1352
+#: src/ml-slider.php:1343
 msgid "100% width"
 msgstr ""
 
-#: src/ml-slider.php:1355
+#: src/ml-slider.php:1346
 msgid "Stretch the slideshow output to fill it's parent container"
 msgstr ""
 
-#: src/ml-slider.php:1360
+#: src/ml-slider.php:1351
 msgid "Center align"
 msgstr ""
 
-#: src/ml-slider.php:1363
+#: src/ml-slider.php:1354
 msgid "Center align the slideshow"
 msgstr ""
 
-#: src/ml-slider.php:1368
+#: src/ml-slider.php:1359
 msgid "Auto play"
 msgstr ""
 
-#: src/ml-slider.php:1371
+#: src/ml-slider.php:1362
 msgid "Transition between slides automatically"
 msgstr ""
 
-#: src/ml-slider.php:1376
+#: src/ml-slider.php:1367
 msgid "Image Crop"
 msgstr ""
 
-#: src/ml-slider.php:1380
+#: src/ml-slider.php:1371
 msgid "Smart Crop"
 msgstr ""
 
-#: src/ml-slider.php:1381
+#: src/ml-slider.php:1372
 msgid "Standard"
 msgstr ""
 
-#: src/ml-slider.php:1382
+#: src/ml-slider.php:1373
 msgid "Disabled"
 msgstr ""
 
-#: src/ml-slider.php:1383
+#: src/ml-slider.php:1374
 msgid "Disabled (Smart Pad)"
 msgstr ""
 
-#: src/ml-slider.php:1385
+#: src/ml-slider.php:1376
 msgid "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size"
 msgstr ""
 
-#: src/ml-slider.php:1390
+#: src/ml-slider.php:1381
 msgid "Carousel mode"
 msgstr ""
 
-#: src/ml-slider.php:1393
+#: src/ml-slider.php:1384
 msgid "Display multiple slides at once. Slideshow output will be 100% wide."
 msgstr ""
 
-#: src/ml-slider.php:1401
+#: src/ml-slider.php:1392
 msgid "Carousel margin"
 msgstr ""
 
-#: src/ml-slider.php:1404
+#: src/ml-slider.php:1395
 msgid "Pixel margin between slides in carousel."
 msgstr ""
 
-#: src/ml-slider.php:1410
+#: src/ml-slider.php:1401
 msgid "Fade in"
 msgstr ""
 
-#: src/ml-slider.php:1413
+#: src/ml-slider.php:1404
 msgid "Fade in the first slide"
 msgstr ""
 
-#: src/ml-slider.php:1421
+#: src/ml-slider.php:1412
 msgid "Randomise the order of the slides"
 msgstr ""
 
-#: src/ml-slider.php:1426
+#: src/ml-slider.php:1417
 msgid "Hover pause"
 msgstr ""
 
-#: src/ml-slider.php:1429
+#: src/ml-slider.php:1420
 msgid "Pause the slideshow when hovering over slider, then resume when no longer hovering."
 msgstr ""
 
-#: src/ml-slider.php:1434
+#: src/ml-slider.php:1425
 msgid "Reverse"
 msgstr ""
 
-#: src/ml-slider.php:1437
+#: src/ml-slider.php:1428
 msgid "Reverse the animation direction"
 msgstr ""
 
-#: src/ml-slider.php:1447
+#: src/ml-slider.php:1438
 msgid "Slide delay"
 msgstr ""
 
-#: src/ml-slider.php:1449
+#: src/ml-slider.php:1440
 msgid "How long to display each slide, in milliseconds"
 msgstr ""
 
-#: src/ml-slider.php:1450, src/ml-slider.php:1463, src/ml-slider.php:1476, src/ml-slider.php:1552, src/ml-slider.php:1574
+#: src/ml-slider.php:1441, src/ml-slider.php:1454, src/ml-slider.php:1467, src/ml-slider.php:1543, src/ml-slider.php:1565
 msgctxt "Short for milliseconds"
 msgid "ms"
 msgstr ""
 
-#: src/ml-slider.php:1460
+#: src/ml-slider.php:1451
 msgid "Animation speed"
 msgstr ""
 
-#: src/ml-slider.php:1462
+#: src/ml-slider.php:1453
 msgid "Set the speed of animations, in milliseconds"
 msgstr ""
 
-#: src/ml-slider.php:1473, src/ml-slider.php:1475
+#: src/ml-slider.php:1464, src/ml-slider.php:1466
 msgid "Number of slices"
 msgstr ""
 
-#: src/ml-slider.php:1486, src/ml-slider.php:1488, src/ml-slider.php:1499, src/ml-slider.php:1501
+#: src/ml-slider.php:1477, src/ml-slider.php:1479, src/ml-slider.php:1490, src/ml-slider.php:1492
 msgid "Number of squares"
 msgstr ""
 
-#: src/ml-slider.php:1507
+#: src/ml-slider.php:1498
 msgid "Slide direction"
 msgstr ""
 
-#: src/ml-slider.php:1509
+#: src/ml-slider.php:1500
 msgid "Select the sliding direction"
 msgstr ""
 
-#: src/ml-slider.php:1512
+#: src/ml-slider.php:1503
 msgid "Horizontal"
 msgstr ""
 
-#: src/ml-slider.php:1513
+#: src/ml-slider.php:1504
 msgid "Vertical"
 msgstr ""
 
-#: src/ml-slider.php:1519
+#: src/ml-slider.php:1510
 msgid "Easing"
 msgstr ""
 
-#: src/ml-slider.php:1521
+#: src/ml-slider.php:1512
 msgid "Animation easing effect"
 msgstr ""
 
-#: src/ml-slider.php:1528
+#: src/ml-slider.php:1519
 msgid "Previous text"
 msgstr ""
 
-#: src/ml-slider.php:1530
+#: src/ml-slider.php:1521
 msgid "Set the text for the 'previous' direction item"
 msgstr ""
 
-#: src/ml-slider.php:1536
+#: src/ml-slider.php:1527
 msgid "Next text"
 msgstr ""
 
-#: src/ml-slider.php:1538
+#: src/ml-slider.php:1529
 msgid "Set the text for the 'next' direction item"
 msgstr ""
 
-#: src/ml-slider.php:1549
+#: src/ml-slider.php:1540
 msgid "Square delay"
 msgstr ""
 
-#: src/ml-slider.php:1551
+#: src/ml-slider.php:1542
 msgid "Delay between squares in ms"
 msgstr ""
 
-#: src/ml-slider.php:1558
+#: src/ml-slider.php:1549
 msgid "Opacity"
 msgstr ""
 
-#: src/ml-slider.php:1560
+#: src/ml-slider.php:1551
 msgid "Opacity of title and navigation, between 0 and 1"
 msgstr ""
 
-#: src/ml-slider.php:1571
+#: src/ml-slider.php:1562
 msgid "Caption speed"
 msgstr ""
 
-#: src/ml-slider.php:1573
+#: src/ml-slider.php:1564
 msgid "Set the fade in speed of the caption"
 msgstr ""
 
-#: src/ml-slider.php:1580
+#: src/ml-slider.php:1571
 msgid "Developer options"
 msgstr ""
 
-#: src/ml-slider.php:1585
+#: src/ml-slider.php:1576
 msgid "CSS classes"
 msgstr ""
 
-#: src/ml-slider.php:1587
+#: src/ml-slider.php:1578
 msgid "Specify any custom CSS Classes you would like to be added to the slider wrapper"
 msgstr ""
 
-#: src/ml-slider.php:1593
+#: src/ml-slider.php:1584
 msgid "Print CSS"
 msgstr ""
 
-#: src/ml-slider.php:1596
+#: src/ml-slider.php:1587
 msgid "Uncheck this is you would like to include your own CSS"
 msgstr ""
 
-#: src/ml-slider.php:1601
+#: src/ml-slider.php:1592
 msgid "Print JS"
 msgstr ""
 
-#: src/ml-slider.php:1604
+#: src/ml-slider.php:1595
 msgid "Uncheck this is you would like to include your own Javascript"
 msgstr ""
 
-#: src/ml-slider.php:1609
+#: src/ml-slider.php:1600
 msgid "No conflict mode"
 msgstr ""
 
-#: src/ml-slider.php:1612
+#: src/ml-slider.php:1603
 msgid "Delay adding the flexslider class to the slideshow"
 msgstr ""
 
-#: src/ml-slider.php:1629
+#: src/ml-slider.php:1620
 msgid "Delete slideshow"
 msgstr ""
 
-#: src/ml-slider.php:1669
+#: src/ml-slider.php:1657
 msgid "Select slideshow to insert into post"
 msgstr ""
 
-#: src/ml-slider.php:1672
-msgid "Add slider"
+#: src/ml-slider.php:1659
+msgid "Add slideshow"
 msgstr ""
 
-#: src/ml-slider.php:1706
+#: src/ml-slider.php:1689
 msgctxt "Keep the plugin name \"MetaSlider\" when possible"
 msgid "Insert MetaSlider"
 msgstr ""
 
-#: src/ml-slider.php:1708
+#: src/ml-slider.php:1691
 msgid "Choose slideshow"
 msgstr ""
 
-#: src/ml-slider.php:1714
+#: src/ml-slider.php:1697
 msgid "Insert slideshow"
 msgstr ""
 
-#: src/ml-slider.php:1745
+#: src/ml-slider.php:1728
 msgctxt "Translators: %s opens and closes a strong tag"
 msgid "Ideal for easily creating eye-catching presentations and slideshows using stunning effects with %s 30 animation options %s and a beautiful, easy to use interface."
 msgstr ""
 
-#: src/ml-slider.php:1745
+#: src/ml-slider.php:1728
 msgctxt "Translators: %1$s opens and %2$s closes a strong tag"
 msgid "Layers can include %1$s text, HTML, images, videos %2$s and even %1$s shortcodes%2$s!"
 msgstr ""
 
-#: src/ml-slider.php:1746
+#: src/ml-slider.php:1729
 msgid "Additional optimization and customization options including using a video as the slide background, and adjusting the padding and background color of each layer."
 msgstr ""
 
-#: src/ml-slider.php:1747, src/ml-slider.php:1774, src/ml-slider.php:1800, src/ml-slider.php:1825
+#: src/ml-slider.php:1730, src/ml-slider.php:1757, src/ml-slider.php:1783, src/ml-slider.php:1808
 msgid "Find out more about all the features of the Add-on Pack here"
 msgstr ""
 
-#: src/ml-slider.php:1748, src/ml-slider.php:1775, src/ml-slider.php:1801, src/ml-slider.php:1826
+#: src/ml-slider.php:1731, src/ml-slider.php:1758, src/ml-slider.php:1784, src/ml-slider.php:1809
 msgid "Opens in a new window"
 msgstr ""
 
-#: src/ml-slider.php:1771
+#: src/ml-slider.php:1754
 msgid "Create a slideshow full of your favorite videos easily and quickly by simply adding a URL to a Vimeo slide."
 msgstr ""
 
-#: src/ml-slider.php:1772, src/ml-slider.php:1798
+#: src/ml-slider.php:1755, src/ml-slider.php:1781
 msgid "Features include an automatic play/pause function, in which your slideshow will detect when you set a video to play and continue once the video has finished."
 msgstr ""
 
-#: src/ml-slider.php:1773, src/ml-slider.php:1799
+#: src/ml-slider.php:1756, src/ml-slider.php:1782
 msgid "You could even have the slider autoplay a video, giving you a smooth, completely automatic presentation!"
 msgstr ""
 
-#: src/ml-slider.php:1797
+#: src/ml-slider.php:1780
 msgid "Create a slideshow full of your favorite videos easily and quickly by simply adding a URL to a YouTube slide."
 msgstr ""
 
-#: src/ml-slider.php:1822
+#: src/ml-slider.php:1805
 msgctxt "Translators: %1$s opens and %2$s closes a strong tag"
 msgid "Show off your %1$sblog posts%2$s, %1$sevents%2$s, %1$sWooCommerce products%2$s and other content with %1$sPost Feed%2$s."
 msgstr ""
 
-#: src/ml-slider.php:1823
+#: src/ml-slider.php:1806
 msgid "Customise and control which post types you want to display, their order and how to restrict posts to certain tags or categories."
 msgstr ""
 
-#: src/ml-slider.php:1824
+#: src/ml-slider.php:1807
 msgid "Post Feed slides can also be used with other slide types to either show one post at a time or in a carousel mode, allowing you to show off a large number of your latest posts in a small amount of space."
 msgstr ""
 
-#: src/ml-slider.php:1855
+#: src/ml-slider.php:1838
 msgid "Take a tour"
 msgstr ""
 
-#: src/ml-slider.php:1857
+#: src/ml-slider.php:1840
 msgid "Premium Support"
 msgstr ""
 
-#: src/ml-slider.php:1861
+#: src/ml-slider.php:1844
 msgid "Support"
 msgstr ""
 
-#: src/ml-slider.php:1863
+#: src/ml-slider.php:1846
 msgid "Documentation"
 msgstr ""
 
-#: src/ml-slider.php:1864
+#: src/ml-slider.php:1847
 msgid "Leave a review"
 msgstr ""
 

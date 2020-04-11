@@ -10,6 +10,8 @@ class PostieConfigOptions {
     const CategoryColon = 'category_colon';
     const PostFormat = 'post_format';
     const ImageResize = 'image_resize';
+    const DefaultTitle = 'default_title';
+    const TurnAuthorizationOff = 'turn_authorization_off';
 
 }
 
@@ -174,11 +176,11 @@ class PostieConfig {
             'icon_size' => 32,
             'auto_gallery' => false,
             'image_new_window' => false,
-            'image_placeholder' => "#img%#",
+            'image_placeholder' => '#img%#',
             'images_append' => true,
             'imagetemplate' => $wordpress_default,
             'imagetemplates' => $imageTemplates,
-            'input_protocol' => "pop3",
+            'input_protocol' => 'pop3',
             'input_connection' => 'sockets',
             'interval' => 'twiceperhour',
             'mail_server' => NULL,
@@ -186,9 +188,9 @@ class PostieConfig {
             'mail_userid' => NULL,
             'mail_password' => NULL,
             'maxemails' => 0,
-            'message_start' => "",
-            'message_end' => "",
-            'message_encoding' => "UTF-8",
+            'message_start' => '',
+            'message_end' => '',
+            'message_encoding' => 'UTF-8',
             'message_dequote' => true,
             'post_status' => 'publish',
             'prefer_text_type' => 'plain',

@@ -1,60 +1,57 @@
-import { applyMiddleware, createStore } from 'redux';
-import rootReducer from './reducers';
-import { save, load } from 'redux-localstorage-simple';
+import { extendObservable, autorun, observable, toJS } from "mobx";
+import Ui from './stores/ui';
+import FieldComponents from './stores/fieldComponents';
+import Grid from './stores/grid';
+import Emails from './stores/emails';
+import FormInfo from './stores/formInfo';
+import FormStyles from './stores/formStyles'
+import ConfirmationDialog from './stores/confirmationDialog';
 
-const initialState = {
-	PageLoading: false,
-	PlaceholderDialog: false,
-	EmailWizardDialog: false,
-	/**
-	 * Field components currently active in the builder
-	 */
-	FieldComponents: KaliFormsObject.fieldComponents,
-	/**
-	 * Grid element
-	 */
-	Grid: KaliFormsObject.grid,
-	/**
-	 * Are we template selecting?
-	 */
-	TemplateSelecting: KaliFormsObject.fieldComponents.length === 0,
-	/**
-	 * Sidebar state, active tab and components
-	 */
-	Sidebar: {
-		activeTab: 'formFields',
-		fieldComponents: KaliFormsObject.formFields,
-	},
-	/**
-	 * Conditional logic
-	 */
-	ConditionalLogic: typeof KaliFormsObject.conditionalLogic !== 'undefiend' ? KaliFormsObject.conditionalLogic : [],
-	/**
-	 * Hubspot integration
-	 */
-	HubSpot: typeof KaliFormsObject.hubspot !== 'undefined' ? KaliFormsObject.hubspot : [],
-	/**
-	 * Form Emails
-	 */
-	FormEmails: KaliFormsObject.formEmails,
-	Errors: [],
-};
+const autoSave = (store, save) => {
+	let firstRun = true;
+	autorun(() => {
+		const json = toJS(store._UI_);
+		if (!firstRun) {
+			save(json);
+		}
+		firstRun = false;
+	});
+}
+export const clear = () => {
+	localStorage.removeItem('KaliFormsUi_' + KaliFormsObject.formId);
+}
 
-const createStoreWithMiddleware
-	= applyMiddleware(
-		save({ debounce: 500, states: ['Ui'], namespace: `form${KaliFormsObject.formId}` }) // Saving done here
-	)(createStore)
+class KaliFormsStore {
+	@observable _UI_ = new Ui();
+	@observable _FIELD_COMPONENTS_ = new FieldComponents();
+	@observable _GRID_ = new Grid();
+	@observable _EMAILS_ = new Emails();
+	@observable _FORM_INFO_ = new FormInfo();
+	@observable _FORM_STYLES_ = new FormStyles();
+	@observable _CONFIRMATION_DIALOG_ = new ConfirmationDialog()
 
-const store = createStoreWithMiddleware(
-	rootReducer,
-	load({
-		states: ['Ui'],
-		preloadedState: initialState,
-		disableWarnings: true,
-		namespace: `form${KaliFormsObject.formId}`
-	}) // Loading done here
-)
+	constructor() {
+		this.load();
+		autoSave(this, this.save.bind(this));
+	}
 
-// let store = createStore(rootReducer, initialState);
+	load() {
+		const lS = localStorage.getItem('KaliFormsUi_' + KaliFormsObject.formId);
+		if (lS !== null) {
+			extendObservable(this._UI_, JSON.parse(lS));
+		}
+	}
 
-export default store;
+	save(json) {
+		delete json.activeTabInSidebar;
+		delete json.activeFormFieldInSidebar;
+		delete json.activeFormFieldGroupTab;
+		delete json.templateSelecting;
+		delete json.activeEmailInSidebar;
+
+		localStorage.setItem('KaliFormsUi_' + KaliFormsObject.formId, JSON.stringify({ ...json }));
+	}
+}
+
+
+export const store = new KaliFormsStore();

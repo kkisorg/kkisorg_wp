@@ -47,6 +47,38 @@ class Emailer
         }
         $this->data = $rawData;
         $this->placeholders = $placeholders;
+        // In case we have a fail log "ready" - use this
+        $fail_log = get_option($this->slug . '_email_fail_log', 0);
+        if (checked($fail_log, '1', false)) {
+            add_action('wp_mail_failed', [$this, 'email_error'], 10, 1);
+        }
+    }
+
+    /**
+     * Email error logger
+     *
+     * @return void
+     */
+    public function email_error($wp_error)
+    {
+        $temp_dir = get_temp_dir();
+        $fn = $temp_dir . $this->slug . '-mail.log';
+        $fp = fopen($fn, 'a');
+        fputs($fp, "(" . date('Y-m-d H:i:s') . ") Mailer Error -> " . $wp_error->get_error_message() . "\n");
+        fclose($fp);
+    }
+    /**
+     * Email ok logger
+     *
+     * @return void
+     */
+    public function email_ok($message)
+    {
+        $temp_dir = get_temp_dir();
+        $fn = $temp_dir . $this->slug . '-mail.log';
+        $fp = fopen($fn, 'a');
+        fputs($fp, "(" . date('Y-m-d H:i:s') . ") Mailer INFO (sent)-> " . $message . "\n");
+        fclose($fp);
     }
 
     /**
@@ -106,6 +138,9 @@ class Emailer
         }
 
         $this->placeholders = array_merge((new GeneralPlaceholders())->general_placeholders, $this->placeholders);
+        if (isset($this->placeholders['{entryCounter}'])) {
+            $this->placeholders['{entryCounter}'] = call_user_func($this->placeholdered_data['{entryCounter}'], $this->form);
+        }
 
         if (isset($this->placeholders['{submission_link}'])) {
             $this->placeholders['{submission_link}'] = call_user_func(
@@ -117,7 +152,41 @@ class Emailer
             );
         }
     }
-
+    /**
+     * Return all data as formatted string
+     *
+     * @param array $data
+     * @return string
+     */
+    public function get_all_field_data($data)
+    {
+        $str = '';
+        foreach ($data as $key => $value) {
+            $label = $this->get_field_label($key);
+            if (!in_array($key, ['formId', 'nonce', 'ip_address'])) {
+                $str .= $label . ' : ' . $value . '<br />';
+            }
+        }
+        return $str;
+    }
+    /**
+     * Get field label
+     *
+     * @param string $key
+     * @return string
+     */
+    public function get_field_label($key)
+    {
+        $fields = json_decode($this->get('field_components', '[]'), false, 512, JSON_HEX_QUOT);
+        $label = '';
+        foreach ($fields as $idx => $field) {
+            if ($field->properties->name === $key) {
+                $label = !empty($field->properties->caption) ? $field->properties->caption : $field->properties->name;
+                break;
+            }
+        }
+        return $label;
+    }
     /**
      * Plucks values from the properties array
      *
@@ -140,6 +209,7 @@ class Emailer
     public function send()
     {
         $emails = json_decode($this->get('form', true, 'emails', '[]'));
+
         $sent = [];
         foreach ($emails as $email) {
             $sent[] = $this->_send($email);
@@ -151,7 +221,29 @@ class Emailer
 
         return new \WP_Error();
     }
+    /**
+     * Is smtp check
+     *
+     * @return boolean
+     */
+    public function is_smtp()
+    {
+        $auth = get_option('kaliforms_smtp_auth', 0);
+        $host = get_option('kaliforms_smtp_host', '');
+        $port = get_option('kaliforms_smtp_port', '');
+        $ssl = get_option('kaliforms_smtp_secure', 'None');
+        $username = get_option('kaliforms_smtp_username', '');
+        $password = get_option('kaliforms_smtp_password', '');
 
+        if (empty($host)) {
+            return false;
+        }
+        if ($auth !== 0 && (empty($username) || empty($password))) {
+            return false;
+        }
+
+        return true;
+    }
     /**
      * Send emails one by one
      */
@@ -188,17 +280,27 @@ class Emailer
 
         $headers = $this->_get_headers($props);
 
-        // add_action('phpmailer_init', function ($phpmailer) use ($props) {
-        //     $phpmailer->isSMTP();
-        //     $phpmailer->Host = SMTP_HOST;
-        //     $phpmailer->SMTPAuth = SMTP_AUTH;
-        //     $phpmailer->Port = SMTP_PORT;
-        //     $phpmailer->SMTPSecure = SMTP_SECURE;
-        //     $phpmailer->Username = SMTP_USERNAME;
-        //     $phpmailer->Password = SMTP_PASSWORD;
-        //     $phpmailer->From = SMTP_FROM;
-        //     $phpmailer->FromName = SMTP_FROMNAME;
-        // });
+        $smtp = $this->is_smtp();
+        if ($smtp) {
+            add_action('phpmailer_init', function ($phpmailer) use ($props) {
+                $auth = get_option('kaliforms_smtp_auth', 0);
+                $host = get_option('kaliforms_smtp_host', '');
+                $port = get_option('kaliforms_smtp_port', '');
+                $ssl = get_option('kaliforms_smtp_secure', 'None');
+                $username = get_option('kaliforms_smtp_username', '');
+                $password = get_option('kaliforms_smtp_password', '');
+
+                $phpmailer->isSMTP();
+                $phpmailer->Host = $host;
+                $phpmailer->SMTPAuth = $auth === '1';
+                $phpmailer->Port = absint($port);
+                $phpmailer->SMTPSecure = strtolower($ssl);
+                $phpmailer->Username = $username;
+                $phpmailer->Password = $password;
+                $phpmailer->From = $username;
+                $phpmailer->FromName = $props['fromName'];
+            });
+        }
 
         $attachments = [];
 
@@ -223,8 +325,13 @@ class Emailer
         }
 
         $attachments = array_filter($attachments);
+        $email_sent = wp_mail($props['toEmail'], $props['emailSubject'], $props['emailBody'], $headers, $attachments);
 
-        return wp_mail($props['toEmail'], $props['emailSubject'], $props['emailBody'], $headers, $attachments);
+        $fail_log = get_option($this->slug . '_email_fail_log', 0);
+        if (checked($fail_log, '1', false) && $email_sent) {
+            $this->email_ok($props['toEmail'] . ' - ' . $props['emailSubject']);
+        }
+        return $email_sent;
     }
 
     /**
@@ -249,7 +356,7 @@ class Emailer
             }
         }
         if (!empty($props['replyTo'])) {
-            $arr = explode(',', $props['ccEmail']);
+            $arr = explode(',', $props['replyTo']);
             foreach ($arr as $email) {
                 $headers[] = 'Reply-to: <' . $email . '>;';
             }

@@ -6,7 +6,7 @@ import MoveVertIcon from '@material-ui/icons/MoreVert'
  * Addable list item handle
  */
 const AddableListItemHandle = (props) => {
-	return (<IconButton><MoveVertIcon /></IconButton>)
+	return (<IconButton {...props}><MoveVertIcon /></IconButton>)
 }
 
 export default sortableHandle(AddableListItemHandle);

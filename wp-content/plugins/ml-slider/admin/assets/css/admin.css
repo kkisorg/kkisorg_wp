@@ -36,6 +36,7 @@
 @import "./components/wordpress.css";
 @import "./components/forms.css";
 @import "./components/notifications.css";
+@import "./components/animations.css";
 
 
 
@@ -513,7 +514,6 @@ eventually be removed/refactored */
 }
 
 .metaslider .tabs-content .row label {
-    color: #999;
     display: inline-block;
 	text-indent: 3px;
 	margin-bottom: 3px;

@@ -154,12 +154,12 @@ body {
 }
 
 .react-grid-item>.react-resizable-handle::after {
-    right: 4px;
-    bottom: 4px;
+    right: 3px;
+    bottom: 3px;
     width: 10px;
     height: 11px;
-    border-right: 3px solid rgba(0, 0, 0, 0.4);
-    border-bottom: 3px solid rgba(0, 0, 0, 0.4);
+    border-right: 2px solid rgba(0, 0, 0, 0.4);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.4);
 }
 
 .postbox {
@@ -184,10 +184,6 @@ body {
 #wpfooter {
     margin-left: initial;
     padding: 0
-}
-
-body {
-    background: initial;
 }
 
 #kaliforms_forms_builder {
@@ -255,6 +251,7 @@ html.wp-toolbar {
 #kaliforms-container {
     min-height: 400px;
     width: 100%;
+    height: 100vh;
 }
 
 #wpfooter {
@@ -281,7 +278,7 @@ html.wp-toolbar {
     right: 0;
     bottom: 0;
     left: 0;
-    background: #fff;
+    background: '#f1f1f1';
     display: flex;
     z-index: 10000;
 
@@ -313,6 +310,10 @@ html.wp-toolbar {
             margin-top: 19px;
             position: absolute;
             right: 80px;
+
+            &:first-of-type {
+                right: 125px;
+            }
 
             &:last-of-type {
                 right: 35px;
@@ -399,4 +400,8 @@ html.wp-toolbar {
             transform: translateX(100%);
         }
     }
+}
+
+.addableListHandler {
+    z-index: 9999;
 }

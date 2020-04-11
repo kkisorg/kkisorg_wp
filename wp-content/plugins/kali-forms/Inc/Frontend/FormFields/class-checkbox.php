@@ -27,10 +27,12 @@ class Checkbox extends Form_Field
      */
     public function render($item, $form_info)
     {
+		$item['class'] = 'input';
+
         $item['type'] = 'checkbox';
         $offset = isset($item['offset']) && $item['offset'] > 0 ? 'offset-md-' . absint($item['offset']) : '';
         $div = '<div class="col-12 col-md-' . absint($item['col']) . ' ' . $offset . '">';
-        $div .= '<span style="margin-bottom:15px;display:inline-block">' . esc_html($item['caption']) . '</span>';
+        $div .= '<label class="checkbox-label" style="margin-bottom:15px;display:inline-block">' . esc_html($item['caption']) . '</label>';
         $div .= $item['flow'] === 'vertical'
         ? $this->flow_vertical($item)
         : $this->flow_horizontal($item);
@@ -60,7 +62,7 @@ class Checkbox extends Form_Field
             ? $checked = in_array($choice->value, $defaultValue) ? 'checked' : ''
             : $checked = $choice->value === $defaultValue ? 'checked' : '';
 
-            $div .= '<label>';
+            $div .= '<label class="checkbox-label">';
             $div .= '<input ' . $attributes . ' ' . $checked . ' value="' . esc_attr($choice->value) . '">' . esc_html($choice->label);
             $div .= '</label>';
             $item['id'] = $temp;
@@ -92,7 +94,7 @@ class Checkbox extends Form_Field
             : $checked = $choice->value === $defaultValue ? 'checked' : '';
 
             $div .= '<div class="col-12 col-md-4">';
-            $div .= '<label>';
+            $div .= '<label class="checkbox-label">';
             $div .= '<input ' . $attributes . ' ' . $checked . ' value="' . esc_attr($choice->value) . '">' . esc_html($choice->label);
             $div .= '</label>';
             $div .= '</div>';

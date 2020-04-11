@@ -254,6 +254,95 @@ class MetaSlider_Slideshows {
 	}
 
 	/**
+	 * Method to get a single slideshow from the database
+	 * 
+	 * @param int $id How many slideshows to return
+	 * 
+	 * @return array 
+	 */
+	public function get_single($id) {
+
+		$args = array(
+			'post_type' => 'ml-slider',
+			'post_status' => array('inherit', 'publish'),
+			'orderby' => 'modified',
+			'p' => $id,
+			'suppress_filters' => 1, // wpml, ignore language filter,
+		);
+
+		$slideshow = new WP_Query(apply_filters('metaslider_get_single_slideshows_args', $args));
+		if (is_wp_error($slideshow)) return $slideshow;
+
+		return array_map(array($this, 'build_slideshow_object'), $slideshow->posts);
+	}
+
+	/**
+	 * Method to get slideshows from the database
+	 * 
+	 * @param int $posts_per_page How many slideshows to return
+	 * @param int $page 		  What page to return
+	 * 
+	 * @return array 
+	 */
+	public function get($posts_per_page = 25, $page = 1) {
+
+		if (!$posts_per_page || !$page) return array();
+
+		$args = array(
+			'post_type' => 'ml-slider',
+			'post_status' => array('inherit', 'publish'),
+			'orderby' => 'modified',
+			'suppress_filters' => 1, // wpml, ignore language filter,
+			'paged' => $page,
+			'posts_per_page' => $posts_per_page
+		);
+
+		$slideshows = new WP_Query(apply_filters('metaslider_get_some_slideshows_args', $args));
+		if (is_wp_error($slideshows)) return $slideshows;
+
+		$slideshows_formatted = array_map(array($this, 'build_slideshow_object'), $slideshows->posts);
+
+		$remaining_pages = intval($slideshows->max_num_pages) - intval($page);
+		if ($remaining_pages > 0) {
+			$slideshows_formatted['page'] = $page;
+			$slideshows_formatted['remaining_pages'] = $remaining_pages;
+		}
+
+		// Add the total count so we know there are more to fetch
+		if (1 == $page) {
+			$slideshows_formatted['totalSlideshows'] = $slideshows->found_posts;
+		}
+
+		return $slideshows_formatted;
+	}
+
+	/**
+	 * Method to get slideshows from the database by term
+	 * 
+	 * @param int $term  The search term
+	 * @param int $count How many to return
+	 * 
+	 * @return array 
+	 */
+	public function search($term, $count) {
+
+		$args = array(
+			'post_type' => 'ml-slider',
+			'post_status' => array('inherit', 'publish'),
+			'orderby' => $term ? 'relevance' : 'modified',
+			's' => $term,
+			'suppress_filters' => 1,
+			'posts_per_page' => $count
+		);
+
+		$slideshows = new WP_Query(apply_filters('metaslider_get_some_slideshows_args', $args));
+		if (is_wp_error($slideshows)) return $slideshows;
+
+		return array_map(array($this, 'build_slideshow_object'), $slideshows->posts);
+
+	}
+
+	/**
 	 * Method to get all slideshows from the database
 	 * 
 	 * @return array 
@@ -270,12 +359,26 @@ class MetaSlider_Slideshows {
 
 		$slideshows = get_posts(apply_filters('metaslider_all_meta_sliders_args', $args));
 
-        return array_map(array($this, 'build_slideshow_object'), $slideshows);
+        return array_map(array($this, 'build_slideshow_object_simple'), $slideshows);
+	}
+
+	/**
+     * Method to build out a simple slideshow object
+     *
+	 * @param object $slideshow - The slideshow object
+     * @return array
+     */
+	public function build_slideshow_object_simple($slideshow) {
+		if (empty($slideshow)) return array();
+		$slideshows = array(
+			'id' => $slideshow->ID,
+			'title' => $slideshow->post_title ? $slideshow->post_title : '# ' . $slideshow->ID,
+		);
+		return $slideshows;
 	}
 
 	/**
      * Method to build out the slideshow object
-	 * For now this wont include slides. They will be handled separately.
      *
 	 * @param object $slideshow - The slideshow object
      * @return array
@@ -286,7 +389,7 @@ class MetaSlider_Slideshows {
 
 		$slideshows = array(
 			'id' => $slideshow->ID,
-			'title' => $slideshow->post_title,
+			'title' => $slideshow->post_title ? $slideshow->post_title : '# ' . $slideshow->ID,
 			'created_at' => $slideshow->post_date,
 			'modified_at' => $slideshow->post_modified,
 			'modified_at_gmt' => $slideshow->post_modified_gmt,
@@ -294,6 +397,8 @@ class MetaSlider_Slideshows {
 		);
 
 		foreach (get_post_meta($slideshow->ID) as $key => $value) {
+			if (in_array($key, array('title', 'id', 'created_at', 'modified_at', 'modified_at_gmt', 'slides'))) continue;
+
 			$key = str_replace('ml-slider_settings', 'settings', $key);
 			$key = str_replace('metaslider_slideshow_theme', 'theme', $key);
 			$slideshows[$key] = maybe_unserialize($value[0]);

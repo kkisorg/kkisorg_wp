@@ -106,6 +106,7 @@ class JS_Vars
          * Form Submission Fields
          */
         $this->content['showThankYouMessage'] = esc_attr($this->get('show_thank_you_message', '0'));
+        $this->content['saveFormSubmissions'] = esc_attr($this->get('save_form_submissions', '0'));
         $this->content['thankYouMessage'] = wp_kses_post($this->get('thank_you_message', ''));
         $this->content['redirectUrl'] = esc_url($this->get('redirect_url', ''));
         /**
@@ -117,7 +118,13 @@ class JS_Vars
          */
         $forms = new Predefined_Forms();
         $forms->set_forms();
-        $this->content['predefinedForms'] = $forms->forms;
+		$this->content['predefinedForms'] = $forms->forms;
+
+		/**
+		 * Form styles
+		 */
+		$form_styles = Form_Styles::get_instance();
+		$this->content['formStyles'] = $form_styles->styles;
         /**
          * Form id
          */
@@ -129,6 +136,8 @@ class JS_Vars
         $this->content['payPalClientIdSandBox'] = esc_html($this->get('paypal_client_id_sandbox', ''));
         $this->content['paymentsLive'] = esc_attr($this->get('payments_live', '0'));
         $this->content['currency'] = esc_attr($this->get('currency', 'USD'));
+        $this->content['selectedFormStyle'] = esc_attr($this->get('selected_form_style', 'theme'));
+
         /**
          * Applies a filter, maybe someone wants to edit something
          */

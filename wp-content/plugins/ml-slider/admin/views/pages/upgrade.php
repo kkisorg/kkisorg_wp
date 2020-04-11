@@ -152,7 +152,7 @@ $width = (in_array(false, $installed_plugins, true)) ? 'metaslider_half_width' :
                 <?php echo metaslider_optimize_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=updraftcentral'), 'install-plugin_updraftcentral'), null, '<img class="addons" alt="'.esc_attr_x("UpdraftCentral Dashboard", 'Keep the plugin name "UpdraftCentral" when possible', 'ml-slider').'" src="'. METASLIDER_ADMIN_URL.'images/features/updraftcentral_logo.png' .'">');
                 echo metaslider_optimize_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=updraftcentral'), 'install-plugin_updraftcentral'), null, '<h3>'._x('UpdraftCentral – save hours managing multiple WP sites from one place', 'Keep the plugin name "UpdraftCentral" when possible', 'ml-slider').'</h3>', 'other-plugin-title'); ?>
                 <p><?php _ex("If you manage a few WordPress sites, you need UpdraftCentral.", 'Keep the plugin name "UpdraftCentral" when possible', 'ml-slider');?></p>
-                <p><?php _ex("UpdraftCentral is a powerful tool that allows you to efficiently manage, update, backup and even restore multiple websites from just one location. You can also manage users and comments on all the sites at once, and through its central login feature, you can access each WP-dashboard with a single click.", 'Keep the plugin name "UpdraftCentral" when possible', 'ml-slider'); ?></p>
+                <p><?php _ex("UpdraftCentral is a powerful tool that allows you to efficiently manage, update, backup multiple websites from just one location. You can also manage users and comments on all the sites at once, and through its central login feature, you can access each WP-dashboard with a single click.", 'Keep the plugin name "UpdraftCentral" when possible', 'ml-slider'); ?></p>
                 <p><?php _ex("With a wide range of useful features, including automated backup schedules and sophisticated one click updates, UpdraftCentral is sure to boost to your productivity and save you time.", 'Keep the plugin name "UpdraftCentral" when possible', 'ml-slider'); ?></p>
                 <?php echo metaslider_optimize_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=updraftcentral'), 'install-plugin_updraftcentral'), __('Try for free', 'ml-slider')); ?>
             </div>
@@ -162,10 +162,15 @@ $width = (in_array(false, $installed_plugins, true)) ? 'metaslider_half_width' :
         <div class="postbox shadow">
             <div class="inside">
                 <?php echo metaslider_optimize_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=wp-optimize'), 'install-plugin_wp-optimize'), null, '<img class="addons" alt="'.esc_attr_x("WP-Optimize", 'Keep the plugin name "WP-Optimize" when possible', 'ml-slider').'" src="'. METASLIDER_ADMIN_URL.'images/features/wpo_logo.png' .'">');
-                echo metaslider_optimize_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=wp-optimize'), 'install-plugin_wp-optimize'), null, '<h3>'._x('Wp-Optimize – faster, fitter, cleaner WP sites for optimal performance.', 'Keep the plugin name "WP-Optimize" when possible', 'ml-slider').'</h3>', 'other-plugin-title'); ?>
-                <p><?php _ex("WP-Optimize, the #1 optimization plugin, keeps your WordPress site at prime speed by cleaning the database without the need for phpMyAdmin.", 'Keep the plugin name "WP-Optimize" when possible', 'ml-slider'); ?></p>
-                <p><?php _ex("Incredibly simple to use, WP-Optimize clears out old webpage revisions, spam, trash and unapproved comments, all of which take up megabytes of valuable space and leave your database sluggish and ultimately unfit for purpose.", 'Keep the plugin name "WP-Optimize" when possible', 'ml-slider'); ?></p>
-                <p><?php _ex("WP-Optimize has a load of valuable features, including automated weekly clean up scheduling, the retention of a set number of weeks’ data, a display of how much space can be cleared, the enabling / disabling of trackbacks and comments for all published posts, and an ‘administrators only’ security feature.", 'ml-slider'); ?></p>
+                echo metaslider_optimize_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=wp-optimize'), 'install-plugin_wp-optimize'), null, '<h3>'._x('WP-Optimize - Clean, Compress, Cache.', 'Keep the plugin name "WP-Optimize" when possible', 'ml-slider').'</h3>', 'other-plugin-title'); ?>
+                <div>
+				<?php _e('It does it in three clever ways:', 'ml-slider'); ?>
+				<ul class="ml-4 mt-2 list-disc">
+					<li><?php _e('It allows you to clean and optimize your database.', 'ml-slider'); ?></li>
+					<li><?php _e('It gives you the option to compress your images.', 'ml-slider'); ?></li>
+					<li><?php _e('It allows you cache your pages, for super fast load times (read more caching information below).', 'ml-slider'); ?></li>
+				</ul>
+				<p><?php _e('Extensive tests show the cache feature alone can make WordPress sites faster than any other caching plugin available. But when you combine the cache with the database and image optimizing features, the difference with alternative solutions is significant.', 'ml-slider'); ?></p>
                 <?php echo metaslider_optimize_url(wp_nonce_url(self_admin_url('update.php?action=install-plugin&plugin=wp-optimize'), 'install-plugin_wp-optimize'), __('Try for free', 'ml-slider')); ?>
             </div>
         </div>

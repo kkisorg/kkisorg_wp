@@ -4,7 +4,7 @@ Tags: contact form, contact form plugin, forms, form builder, custom form, conta
 Requires at least: 4.6
 Tested up to: 5.3
 Requires PHP: 5.6
-Stable tag: 1.4.0
+Stable tag: 1.6.5
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -63,7 +63,7 @@ Easily use and modify the Kali Forms employee information form template which yo
 
 = The Fastest WordPress Form Plugin Available =
 
-We built the Kali Forms WordPress form plugin from the ground up overcome the performance issues caused by most (if not all) other form plugins. Say goodbye to legacy, outdated code. KaliForm is built on [React](https://reactjs.org/).
+We built the Kali Forms WordPress form plugin from the ground up overcome the performance issues caused by most (if not all) other form plugins. Say goodbye to legacy, outdated code. Kali Forms is built on [React](https://reactjs.org/).
 
 = All forms are 100% mobile-responsive. =
 
@@ -88,10 +88,11 @@ We know much of a problem form spam is which is why Kali Forms is designed to us
 ----
 
 = 3rd party or external service disclaimer =
+The plugin sends data (User action) to our website through an API Call (https://kaliforms.com/wp-json/kf/v1/uninstall-feedback) in order to send a uninstall feedback.
 
 The plugin connects to our website through an API call (https://kaliforms.com/wp-json/kf/v1/plugins) in order to request a list of available extensions.
 
-**Kali Forms does not send any data to our website, not do we collect information from the requests.**
+**Kali Forms does not send any data without consent or user action to our website, nor do we collect sensitive information from the requests.**
 
 Our full privacy policy can be found [here](https://kaliforms.com/privacy-policy/).
 
@@ -146,6 +147,50 @@ The easiest and recommended way to install is to click on 'Plugins' then 'Add Ne
 == Screenshots ==
 
 == Changelog ==
+1.6.5
+- Reply To header was not being set property (form notifications)
+
+1.6.4
+- Fixed a bug when clicking the update button would show the deactivation feedback form
+
+1.6.3
+- Checkbox values were not replaced in the placeholder
+
+1.6.2
+- Fixed an issue that didnt trigger the email wizzard
+
+1.6.1
+- {formName} placeholder wasn't returning a value
+
+1.6.0
+- Improved form builder ( design & functionality )
+- Added form themes
+- Form submissions renamed to Form Entries
+- Form entries can be saved without additional plugins ( note that you will need Form Submission plugin to access them through WP)
+- Textareas can be converted to editors ( standard wp editor )
+- Added several form fields ( URL, Phone, Email )
+- Added email duplicate functionality
+- Added field duplicate functionality
+- Added functionality to add placeholders in inputs to prefill user data on page view (e.g. to prefill a field with the user email, you need to use the {user_email} placeholder : [kaliform id="5" email="{user_email}"])
+- Added 2 new placeholders that can be used in fields, thank you message or email notifications: {entryCounter} and {formName}
+- Using PHP Before Form Process scripting areas, you can edit/add/delete values from the submitted data before they are saved
+- QOL adjustments
+
+1.5.0
+- Added a new filter that happens before file uploads
+- Added a review notice for wordpress.org
+- Added Email Settings page to improve and debug mail deliverability
+- Added a duplicate form button in the Forms listing
+- Added a dashboard widget
+- Added an email quick link in the form builder top navigation bar ( email icon )
+- Added possibility to send data through the shorcode e.g. [kaliform id="1" first-name="John" last-name="Doe"]
+- Added uninstall feedback
+- Added system checks
+- Several QOL adjustments
+
+1.4.0
+- Various bugs, fixes and QOL adjustments
+
 1.3.0
 - Added functionality to attach files uploaded through file upload fields to emails
 - Added functionality to attach files from uploaded media to emails (will be improved in the next update)

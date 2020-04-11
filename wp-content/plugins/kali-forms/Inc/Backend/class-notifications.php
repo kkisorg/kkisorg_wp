@@ -83,6 +83,13 @@ class Notifications
             if (get_user_meta(get_current_user_id(), $notice['id'], true)) {
                 continue;
             }
+            $screen = get_current_screen();
+            if (
+                isset($notice['omit-pages']) &&
+                is_array($notice['omit-pages']) &&
+                in_array($screen->id, $notice['omit-pages'])) {
+                continue;
+            }
             printf($this->html, esc_attr($notice['type']), esc_attr($notice['id']), wp_kses_post($notice['message']));
         }
     }
@@ -96,11 +103,11 @@ class Notifications
     public function dismiss_notice($args)
     {
         $args = wp_unslash($_POST['args']);
-		$options = get_option('kaliforms_notices', []);
-		if (isset($args['nonce'])
-			&& !wp_verify_nonce(sanitize_key(wp_unslash($args['nonce'])), 'kaliforms_nonce')) {
-			return 'nok';
-		}
+        $options = get_option('kaliforms_notices', []);
+        if (isset($args['nonce'])
+            && !wp_verify_nonce(sanitize_key(wp_unslash($args['nonce'])), 'kaliforms_nonce')) {
+            return 'nok';
+        }
 
         if (empty($options)) {
             return 'nok';

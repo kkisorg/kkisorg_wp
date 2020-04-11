@@ -50,7 +50,7 @@ class Predefined_Forms
 
         $this->set_forms(true);
 
-		$_POST['args'] = stripslashes_deep( $_POST['args'] );
+        $_POST['args'] = stripslashes_deep($_POST['args']);
 
         if (!isset($this->forms[$_POST['args']['id']])) {
             wp_die('wrong id');
@@ -67,8 +67,10 @@ class Predefined_Forms
                 'name' => $form->name,
                 'emails' => $form->emails,
                 'thank_you_message' => $form->thank_you_message,
+                'conditional_logic' => $form->conditional_logic,
                 'grid' => $form->grid,
                 'field_components' => $form->field_components,
+                'form_info' => $form->form_info,
             ]
         ));
 
@@ -99,7 +101,7 @@ class Predefined_Forms
             'instance' => $full ? $employeeInformation : null,
         ];
 
-		$this->forms['gdpr-contact'] = [
+        $this->forms['gdpr-contact'] = [
             'name' => esc_html__('GDPR-Friendly contact form', 'kaliforms'),
             'description' => esc_html__('A simple gdpr-friendly form meant to help you comunicate with your site users.', 'kaliforms'),
             'class' => 'PredefinedForms\GDPR_Friendly_Contact_Form',
@@ -133,7 +135,7 @@ class Predefined_Forms
 
         $this->forms['jobApplication'] = [
             'name' => esc_html__('Job application', 'kaliforms'),
-            'description' => esc_html__('Use this form in order to collect resumes for the positions available in your company', 'kaliforms'),
+            'description' => esc_html__('Collect resumes for the positions available in your company', 'kaliforms'),
             'pro' => true,
             'class' => 'PredefinedForms\Job_Application_Form',
             'instance' => $full && class_exists('KaliForms\Inc\Backend\PredefinedForms\Job_Application_Form') ? new PredefinedForms\Job_Application_Form() : null,

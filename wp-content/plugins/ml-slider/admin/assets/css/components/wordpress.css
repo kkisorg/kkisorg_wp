@@ -17,3 +17,8 @@ div#wpbody-content > * {
 img {
 	@apply border-none;
 }
+
+#adminmenu .wp-menu-image img {
+	@apply inline border-0;
+	box-sizing: initial;
+}

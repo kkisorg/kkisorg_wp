@@ -1,236 +1,133 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { bindActionCreators } from 'redux';
-import * as StoreActions from '../../store/actions';
-import connect from 'react-redux/es/connect/connect';
+import React from 'react';
 import paypalLogo from './../../../../img/paypal.svg';
-import { makeStyles } from '@material-ui/core/styles';
+import DragIndicatorIcon from '@material-ui/icons/DragIndicator';
+import Box from '@material-ui/core/Box';
+import builderFormFieldStyles from './BuilderFormFieldStyles';
+import { observer } from "mobx-react-lite";
+import { store } from "./../../store/store";
+import StarIcon from '@material-ui/icons/Star';
 
-const mapStateToProps = state => {
-	return {
-		loading: state.PageLoading,
-		formFieldEditor: state.FormFieldEditor,
-		formInfo: state.FormInfo,
-		fieldComponents: state.FieldComponents,
-		sidebar: state.Sidebar,
-	};
-};
+const BuilderFormField = observer((props) => {
+	const classes = builderFormFieldStyles(props);
 
-const mapDispatchToProps = (dispatch) => {
-	return bindActionCreators(StoreActions, dispatch);
-};
-
-const useStyles = makeStyles(theme => {
-	return {
-		container: {
-			width: '100%',
-			display: 'block',
-			padding: theme.spacing(2),
-			cursor: 'move',
-			position: 'relative',
-			textAlign: 'left',
-			'& > .button': {
-				pointerEvents: 'none'
-			}
-		},
-		label: {
-			pointerEvents: 'none',
-		},
-		labelCheckbox: {
-			marginRight: '15px',
-		},
-		select: {
-			width: '100%',
-			padding: theme.spacing(1),
-			pointerEvents: 'none',
-		},
-		input: {
-			width: '100%',
-			padding: theme.spacing(1),
-			pointerEvents: 'none',
-		},
-		inputHidden: {
-			width: '100%',
-			padding: theme.spacing(1),
-			pointerEvents: 'none',
-			opacity: .3,
-		},
-		textarea: {
-			width: '100%',
-			height: 50,
-			lineHeight: '16px !important',
-			boxShadow: 'none',
-			resizable: false,
-			pointerEvents: 'none',
-		},
-		checkbox: {
-			marginRight: '10px'
-		},
-		divider: {
-			width: '100%',
-			position: 'relative',
-			display: 'block',
-			'& span': {
-				position: 'absolute',
-				left: 'calc(50% - 70px)',
-				top: -11,
-				display: 'inline-block',
-				width: '70px',
-				textAlign: 'center',
-				background: theme.palette.background.paper,
-				zIndex: 100,
-			}
-		},
-		fileUpload: {
-			textAlign: 'center',
-			borderRadius: '5px',
-			background: '#fafafa',
-			display: 'block',
-			padding: theme.spacing(3)
-		},
-		grecaptcha: {
-			textAlign: 'center',
-			display: 'inline-block',
-			width: '100%',
-			'& > img': {
-				width: '310px'
-			}
-		},
-		pageBreak: {
-			display: 'flex',
-			alignItems: 'center',
-			width: '100%',
-			'& > div': {
-				flexGrow: '1',
-				textAlign: 'center',
-				'&:first-of-type': {
-					textAlign: 'left',
-				},
-				'&:last-of-type': {
-					textAlign: 'right',
-				},
-				'& > button': {
-					pointerEvents: 'none',
+	const previewField = (field, classes) => {
+		switch (field.id) {
+			case 'rating':
+				var label = setComputedLabelFunc(field);
+				var items = [];
+				var defaultVal = field.properties.default;
+				var max = parseFloat(field.properties.max) > 10 ? 10 : parseFloat(field.properties.max);
+				for (var j = 0; j < max; j++) {
+					items.push(<StarIcon key={j} color={defaultVal <= j ? 'inherit' : 'primary'} />);
 				}
-			}
-		},
-		paypal: {
-			borderRadius: '5px',
-			backgroundColor: '#ffc439',
-			display: 'flex',
-			alignItems: 'center',
-			alignContent: 'center',
-			justifyContent: 'center'
-		},
-		code: {
-			whiteSpace: 'pre',
-			display: 'flex',
-			maxHeight: 70,
-			padding: theme.spacing(2),
-			marginRight: 60,
-			overflowY: 'scroll',
-		}
-	}
-});
 
-const BuilderFormField = (props) => {
-	const setFormField = () => {
-		props.setActiveTabInSidebar('fieldProperties');
-		props.setFormFieldInEditor(props.index);
-	}
-
-	const previewField = (type, classes) => {
-		switch (type) {
-			case 'choices':
-			case 'dropdown':
-				var label = setComputedLabelFunc();
-				var checked = props.fieldComponents[props.index].properties.default;
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
-						<select className={classes.select} value={checked} onChange={e => e}>
-							{
-								props.fieldComponents[props.index].properties.choices.map((choice, idx) => {
-									return (
-										<option value={choice.value} key={idx}>
-											{choice.label}
-										</option>
-									)
-								})
-							}
+						{items}
+						<br />
+						<small>{field.properties.description}</small>
+					</label>
+				)
+			case 'choices':
+			case 'dropdown':
+				var label = setComputedLabelFunc(field);
+				var checked = field.properties.default;
+				var required = field.properties.required;
+				return (
+					<label className={classes.label}>
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
+						<br />
+						<select className={classes.select} value={checked || ''} onChange={e => e}>
+							<If condition={field.properties.hasOwnProperty('choices')}>
+								{
+									field.properties.choices.map((choice, idx) => {
+										return (
+											<option value={choice.value} key={choice.value + idx}>
+												{choice.label}
+											</option>
+										)
+									})
+								}
+							</If>
 						</select>
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<small>{field.properties.description}</small>
 					</label>
 				)
 			case 'freeText':
-				var label = props.fieldComponents[props.index].properties.id;
-				var content = props.fieldComponents[props.index].properties.content;
+				var label = field.properties.id;
+				var content = field.properties.content;
 				if (content !== '') {
-					return (<span dangerouslySetInnerHTML={{ __html: props.fieldComponents[props.index].properties.content }}></span>);
+					return (<span dangerouslySetInnerHTML={{ __html: field.properties.content }}></span>);
 				}
 
 				return (<span>{label}</span>)
 			case 'radio':
-				var label = setComputedLabelFunc();
+				var label = setComputedLabelFunc(field);
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
-						{
-							props.fieldComponents[props.index].properties.choices.map((choice, idx) => {
-								var checked = choice.value === props.fieldComponents[props.index].properties.default;
+						<If condition={field.properties.hasOwnProperty('choices')}>
+							{
+								field.properties.choices.map((choice, idx) => {
+									var checked = choice.value === field.properties.default;
 
-								return (
-									<label className={classes.labelCheckbox} key={idx}>
-										<input type="radio" checked={checked} onChange={e => e} className={classes.checkbox} />
-										{choice.label}
-									</label>
-								)
-							})
-						}
+									return (
+										<label className={classes.labelCheckbox} key={choice.value + idx}>
+											<input type="radio" checked={checked} onChange={e => e} className={classes.checkbox} />
+											{choice.label}
+										</label>
+									)
+								})
+							}
+						</If>
 						<br />
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<small>{field.properties.description}</small>
 					</label>
 				);
 			case 'checkbox':
-				var label = setComputedLabelFunc();
+				var label = setComputedLabelFunc(field);
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
-						{
-							props.fieldComponents[props.index].properties.choices.map((choice, idx) => {
-								let checked = choice.value === props.fieldComponents[props.index].properties.default;
-
-								return (
-									<label className={classes.labelCheckbox} key={idx}>
-										<input type="checkbox" checked={checked} onChange={e => e} className={classes.checkbox} />
-										{choice.label}
-									</label>
-								)
-							})
-						}
+						<If condition={field.properties.hasOwnProperty('choices')}>
+							{
+								field.properties.choices.map((choice, idx) => {
+									let checkedOptions = field.properties.default.split(',');
+									let checked = checkedOptions.includes(choice.value);
+									return (
+										<label className={classes.labelCheckbox} key={choice.value + idx}>
+											<input type="checkbox" checked={checked} onChange={e => e} className={classes.checkbox} />
+											<em>{choice.value}</em> / {choice.label}
+										</label>
+									)
+								})
+							}
+						</If>
 						<br />
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<small>{field.properties.description}</small>
 					</label>
 				);
 			case 'textarea':
-				var label = setComputedLabelFunc();
-				var required = props.fieldComponents[props.index].properties.required;
-				var defaultVal = props.fieldComponents[props.index].properties.default;
-				var placeholder = props.fieldComponents[props.index].properties.placeholder;
+				var label = setComputedLabelFunc(field);
+				var required = field.properties.required;
+				var defaultVal = field.properties.default;
+				var placeholder = field.properties.placeholder;
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
-						<textarea className={classes.textarea} placeholder={placeholder} value={defaultVal} onChange={e => e} />
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<textarea className={classes.textarea} placeholder={placeholder} value={defaultVal || ''} onChange={e => e} />
+						<small>{field.properties.description}</small>
 					</label>
 				);
 			case 'divider':
 				return (
 					<span className={classes.divider}>
-						<span>{props.fieldComponents[props.index].properties.type}</span>
+						<span>{field.properties.type}</span>
 						<hr />
 					</span>
 				);
@@ -242,18 +139,18 @@ const BuilderFormField = (props) => {
 					</span>
 				);
 			case 'submitButton':
-				var label = setComputedLabelFunc();
+				var label = setComputedLabelFunc(field);
 				return (<button className="button">{label}</button>)
 			case 'hidden':
-				var required = props.fieldComponents[props.index].properties.required;
-				var defaultVal = props.fieldComponents[props.index].properties.default;
-				var label = props.fieldComponents[props.index].properties.name + ' field';
+				var required = field.properties.required;
+				var defaultVal = field.properties.default;
+				var label = field.properties.name + ' field';
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
-						<input className={classes.inputHidden} type="textbox" value={defaultVal} onChange={e => e} />
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<input className={classes.inputHidden} type="textbox" value={defaultVal || ''} onChange={e => e} />
+						<small>{field.properties.description}</small>
 					</label>
 				)
 			case 'grecaptcha':
@@ -263,7 +160,7 @@ const BuilderFormField = (props) => {
 					</span>
 				);
 			case 'pageBreak':
-				var label = setComputedLabelFunc();
+				var label = setComputedLabelFunc(field);
 				return (
 					<span className={classes.pageBreak}>
 						<div><button className="button">Back</button></div>
@@ -273,62 +170,62 @@ const BuilderFormField = (props) => {
 				);
 			case 'dateTimePicker':
 			case 'date':
-				var label = setComputedLabelFunc();
-				var required = props.fieldComponents[props.index].properties.required;
-				var defaultVal = props.fieldComponents[props.index].properties.default;
-				var placeholder = props.fieldComponents[props.index].properties.placeholder;
+				var label = setComputedLabelFunc(field);
+				var required = field.properties.required;
+				var defaultVal = field.properties.default;
+				var placeholder = field.properties.placeholder;
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
-						<input className={classes.input} type="date" placeholder={placeholder} value={defaultVal} onChange={e => e} />
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<input className={classes.input} type="date" placeholder={placeholder} value={defaultVal || ''} onChange={e => e} />
+						<small>{field.properties.description}</small>
 					</label>
 				)
 			case 'password':
-				var label = setComputedLabelFunc();
-				var required = props.fieldComponents[props.index].properties.required;
-				var defaultVal = props.fieldComponents[props.index].properties.default;
-				var placeholder = props.fieldComponents[props.index].properties.placeholder;
+				var label = setComputedLabelFunc(field);
+				var required = field.properties.required;
+				var defaultVal = field.properties.default;
+				var placeholder = field.properties.placeholder;
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
 						<input className={classes.input} type="textbox" placeholder={placeholder} value="******" onChange={e => e} />
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<small>{field.properties.description}</small>
 					</label>
 				)
 			case 'range':
-				var label = setComputedLabelFunc();
-				var required = props.fieldComponents[props.index].properties.required;
-				var defaultVal = props.fieldComponents[props.index].properties.default;
-				var placeholder = props.fieldComponents[props.index].properties.placeholder;
+				var label = setComputedLabelFunc(field);
+				var required = field.properties.required;
+				var defaultVal = field.properties.default;
+				var placeholder = field.properties.placeholder;
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
-						<input className={classes.input} min="0" max="100" type="range" placeholder={placeholder} value={defaultVal} onChange={e => e} />
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<input className={classes.input} min="0" max="100" type="range" placeholder={placeholder} value={defaultVal || ''} onChange={e => e} />
+						<small>{field.properties.description}</small>
 					</label>
 				)
 			case 'product':
-				var label = setComputedLabelFunc();
-				return (<span>{label} - {props.fieldComponents[props.index].properties.price}</span>)
+				var label = setComputedLabelFunc(field);
+				return (<span>{label} - {field.properties.price}</span>)
 			case 'paypal':
 				return (<span className={classes.paypal}><img src={paypalLogo} /></span>)
 			case 'smartTextOutput':
-				return (<code className={classes.code}>{props.fieldComponents[props.index].properties.content}</code>)
+				return (<code className={classes.code}>{field.properties.content}</code>)
 			default:
-				var label = setComputedLabelFunc();
-				var required = props.fieldComponents[props.index].properties.required;
-				var defaultVal = props.fieldComponents[props.index].properties.default;
-				var placeholder = props.fieldComponents[props.index].properties.placeholder;
+				var label = setComputedLabelFunc(field);
+				var required = field.properties.required;
+				var defaultVal = field.properties.default;
+				var placeholder = field.properties.placeholder;
 				return (
 					<label className={classes.label}>
-						{label} {required ? '{*}' : ''}
+						{label} {required ? store._FORM_INFO_.requiredFieldMark || '(*)' : ''}
 						<br />
-						<input className={classes.input} type="textbox" placeholder={placeholder} value={defaultVal} onChange={e => e} />
-						<small>{props.fieldComponents[props.index].properties.description}</small>
+						<input className={classes.input} type="textbox" placeholder={placeholder} value={defaultVal || ''} onChange={e => e} />
+						<small>{field.properties.description}</small>
 					</label>
 				)
 		}
@@ -338,36 +235,33 @@ const BuilderFormField = (props) => {
 	 * Better labels
 	 * @return {*}
 	 */
-	const setComputedLabelFunc = () => {
-		let compLabel = `${props.label} field`;
-		if (!props.fieldComponents.length) {
-			return compLabel;
-		}
-
-		if (typeof props.fieldComponents[props.index] === 'undefined') {
-			return compLabel;
-		}
-
-		if (!props.fieldComponents[props.index].hasOwnProperty('properties')) {
-			return compLabel;
-		}
-
-		if (props.fieldComponents[props.index].properties.caption !== '') {
-			compLabel = props.fieldComponents[props.index].properties.caption;
+	const setComputedLabelFunc = (field) => {
+		let compLabel = `${field.label} field`;
+		if (field.properties.caption !== '') {
+			compLabel = field.properties.caption;
 		}
 
 		return compLabel;
 	}
 
-	const classes = useStyles(props);
-	return (
-		<div className={classes.container}>
-			{previewField(props.id, classes)}
-		</div>
-	);
-}
+	const getField = (id) => {
+		let field = store._FIELD_COMPONENTS_.fieldComponents.filter(el => el.internalId === id)
+		if (!field.length) {
+			return null
+		}
+		return field[0];
+	}
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps
-)(BuilderFormField);
+	const field = getField(props.field);
+
+	return (
+		<Box className={classes.container}>
+			<DragIndicatorIcon className={'KaliFormsBuilderDragHandle ' + classes.moveButton} />
+			{<If condition={typeof props.field !== 'undefined'}>
+				{previewField(field, classes)}
+			</If>}
+		</Box>
+	);
+});
+
+export default BuilderFormField;

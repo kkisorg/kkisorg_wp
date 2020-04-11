@@ -1,20 +1,8 @@
-import connect from 'react-redux/es/connect/connect';
-import { bindActionCreators } from 'redux';
-import * as StoreActions from '../../store/actions';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import MenuItem from '@material-ui/core/MenuItem';
-const mapStateToProps = state => {
-	return {
-		loading: state.PageLoading,
-		fieldComponents: state.FieldComponents,
-		fieldComponentsHash: state.FieldComponentsHash,
-		formFieldEditor: state.FormFieldEditor,
-	};
-};
-const mapDispatchToProps = dispatch => {
-	return bindActionCreators(StoreActions, dispatch);
-};
+import { observer } from "mobx-react-lite";
+import { store } from "./../../store/store";
 
 const FieldComponentSelect = (props) => {
 	return (
@@ -25,7 +13,7 @@ const FieldComponentSelect = (props) => {
 			select
 			onChange={e => props.onChange({ field: props.field, value: e.target.value })}
 			fullWidth={true}>
-			{props.fieldComponents.map(field => {
+			{store._FIELD_COMPONENTS_.fieldComponents.map(field => {
 				if (
 					(field.properties.name !== '')
 					&& (field.id === 'checkbox'
@@ -53,4 +41,4 @@ const FieldComponentSelect = (props) => {
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FieldComponentSelect)
+export default FieldComponentSelect

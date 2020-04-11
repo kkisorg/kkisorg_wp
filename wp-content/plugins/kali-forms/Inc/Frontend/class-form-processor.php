@@ -16,7 +16,7 @@ if (!defined('WPINC')) {
  * @todo
  *  1. Separate concerns into smaller classes (easier to maintain)
  *  2. Move payment stuff to the plugin
- *     3. Create a form process hook/filter logic so we dont have to edit this class anymore (concern separation 1.).
+ *  3. Create a form process hook/filter logic so we dont have to edit this class anymore (concern separation 1.).
  */
 class Form_Processor
 {
@@ -92,6 +92,11 @@ class Form_Processor
         $this->data = apply_filters($this->slug . '_before_form_process', $this->data);
 
         /**
+         * If we change something in before process, update placeholders
+         */
+        $this->check_if_placeholders_changed();
+
+        /**
          * Only if we have that particular addon
          */
         $this->_save_data();
@@ -125,6 +130,33 @@ class Form_Processor
                 ]
             )
         );
+    }
+
+    /**
+     * Checks if we have any changes in our data
+     *
+     * @return void
+     */
+    public function check_if_placeholders_changed()
+    {
+        // 1.6.3 fix - the checkbox "string" value was overwritten with the "source of truth"
+        foreach ($this->data as $key => $value) {
+            if (
+                array_key_exists('{' . $key . '}', $this->placeholdered_data) &&
+                $this->placeholdered_data['{' . $key . '}'] !== $value
+            ) {
+                if (
+                    is_array($value) &&
+                    (implode($this->get('multiple_selections_separator', ''), $value) === $this->placeholdered_data['{' . $key . '}'])
+                ) {
+                    continue;
+                }
+
+                $this->placeholdered_data['{' . $key . '}'] = is_array($value)
+                ? implode($this->get('multiple_selections_separator', ''), $value)
+                : $value;
+            }
+        }
     }
 
     /**
@@ -174,12 +206,56 @@ class Form_Processor
 
         $placeholders = $this->get_strings_between($this->get('thank_you_message', ''), '{', '}');
         foreach ($placeholders as $placeholder) {
-            if (!isset($this->placeholdered_data[$placeholder])) {
+            if ($placeholder === '{allFields}') {
+                $this->placeholdered_data[$placeholder] = $this->get_all_field_data($data);
+                continue;
+            }
+            if ($placeholder === '{formName}') {
+                $this->placeholdered_data[$placeholder] = $this->post->post_title;
+                continue;
+            }
+
+            if (!isset($this->placeholdered_data[$placeholder]) && $placeholder !== '{allFields}') {
                 $this->placeholdered_data[$placeholder . '}'] = $this->get_value_from_nested_placeholder($placeholder);
             }
         }
 
         return $data;
+    }
+    /**
+     * Return all data as formatted string
+     *
+     * @param array $data
+     * @return string
+     */
+    public function get_all_field_data($data)
+    {
+        $str = '';
+        foreach ($data as $key => $value) {
+            $label = $this->get_field_label($key);
+            if (!in_array($key, ['formId', 'nonce', 'ip_address'])) {
+                $str .= $label . ' : ' . $value . '<br />';
+            }
+        }
+        return $str;
+    }
+    /**
+     * Get field label
+     *
+     * @param string $key
+     * @return string
+     */
+    public function get_field_label($key)
+    {
+        $fields = json_decode($this->get('field_components', '[]'), false, 512, JSON_HEX_QUOT);
+        $label = '';
+        foreach ($fields as $idx => $field) {
+            if ($field->properties->name === $key) {
+                $label = !empty($field->properties->caption) ? $field->properties->caption : $field->properties->name;
+                break;
+            }
+        }
+        return $label;
     }
     /**
      * Get value from nested placeholder (in a "special way" lol)
@@ -224,7 +300,34 @@ class Form_Processor
             ];
 
             $arr = apply_filters($this->slug . '_save_data', $arr);
+
+            $post = wp_insert_post([
+                'post_type' => 'kaliforms_submitted',
+                'post_title' => $arr['post']->post_title,
+                'post_status' => 'publish',
+            ]);
+
+            if (is_wp_error($post)) {
+                return false;
+            }
+
+            foreach ($arr['data'] as $k => $v) {
+                $value = is_array($v)
+                ? sanitize_text_field(implode($arr['extra']['separator'], $v))
+                : sanitize_text_field($v);
+
+                update_post_meta($post, $k, $value);
+            }
+
+            $arr['submission_id'] = $post;
+
+            $arr = apply_filters($this->slug . '_after_save_data', $arr);
+
             $this->saved = $arr['submission_id'];
+        }
+
+        if (isset($this->placeholdered_data['{entryCounter}'])) {
+            $this->placeholdered_data['{entryCounter}'] = call_user_func($this->placeholdered_data['{entryCounter}'], $this->post->ID);
         }
 
         if (isset($this->placeholdered_data['{submission_link}']) && $this->saved) {

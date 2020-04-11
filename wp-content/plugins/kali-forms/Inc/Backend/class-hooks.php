@@ -54,6 +54,19 @@ class Hooks
         add_action('wp_ajax_nopriv_kaliforms_reload_api_extensions',
             [$this, 'denied']
         );
+        add_action('wp_ajax_kaliforms_set_form_theme',
+            [Form_Styles::get_instance(), 'set_form_theme']
+        );
+        add_action('wp_ajax_nopriv_kaliforms_set_form_theme',
+            [$this, 'denied']
+        );
+    }
+    /**
+     * If the user is not authorized, deny action
+     */
+    public function denied()
+    {
+        wp_die(esc_html__('Denied', 'kaliforms'));
     }
 
     /**
@@ -114,7 +127,14 @@ class Hooks
         wp_localize_script(
             'kaliforms-general-scripts',
             'KaliFormsGeneralObject',
-            ['ajaxurl' => esc_url(admin_url('admin-ajax.php')), 'ajax_nonce' => wp_create_nonce($this->slug . '_nonce')]
+            [
+                'ajaxurl' => esc_url(admin_url('admin-ajax.php')),
+                'ajax_nonce' => wp_create_nonce($this->slug . '_nonce'),
+                'translations' => [
+                    'shortcodeCopied' => esc_html__('Shortcode copied to clipboard', 'kaliforms'),
+                    'themeApplied' => esc_html__('Theme applied', 'kaliforms'),
+                ],
+            ]
         );
 
         // wp_register_script(

@@ -20,7 +20,7 @@ class Form_Builder extends Metabox
     public function render_box()
     {
         wp_nonce_field(KALIFORMS_BASE, 'kaliforms_fields');
-        echo '<div id="kaliforms-container">';
+        echo '<div id="kaliforms-container" class="kaliforms-wrapper">';
         echo $this->skeleton();
         echo '</div>';
     }
@@ -32,39 +32,44 @@ class Form_Builder extends Metabox
         $html .= '<img src="' . KALIFORMS_URL . 'assets/img/logo.svg' . '" />';
         $html .= '<span class="skeleton-button"></span>';
         $html .= '<span class="skeleton-button"></span>';
+        $html .= '<span class="skeleton-button"></span>';
         $html .= '</div>';
         $html .= '<div class="kaliforms-skeleton-main">';
         $html .= '<div class="kaliforms-skeleton-sidebar">
 			<div class="row">
-				<span class="skeleton-box" style="width:50%"></span>
-				<span class="skeleton-box" style="width:50%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
 			</div>
 
 			<div class="row">
-				<span class="skeleton-box" style="width:50%"></span>
-				<span class="skeleton-box" style="width:50%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
 			</div>
 
 			<div class="row">
-				<span class="skeleton-box" style="width:50%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
 			</div>
 
 			<div class="row" style="margin-top:50px">
-				<span class="skeleton-box" style="width:50%"></span>
-				<span class="skeleton-box" style="width:50%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
+			</div>
+
+			<div class="row"
+				<span class="skeleton-box" style="width:33%"></span>
+			</div>
+
+			<div class="row" style="margin-top:50px">
+				<span class="skeleton-box" style="width:33%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
 			</div>
 
 			<div class="row">
-				<span class="skeleton-box" style="width:50%"></span>
-			</div>
-
-			<div class="row" style="margin-top:50px">
-				<span class="skeleton-box" style="width:50%"></span>
-				<span class="skeleton-box" style="width:50%"></span>
-			</div>
-
-			<div class="row" style="margin-top:50px">
-				<span class="skeleton-box" style="width:50%"></span>
+				<span class="skeleton-box" style="width:33%"></span>
 			</div>
 		</div>';
         $html .= '<div class="kaliforms-skeleton-container">';
