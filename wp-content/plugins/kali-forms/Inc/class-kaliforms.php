@@ -5,10 +5,15 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+use KaliForms\Inc\Backend\Dashboard_Widget;
+use KaliForms\Inc\Backend\Form_Styles;
 use KaliForms\Inc\Backend\Hooks;
 use KaliForms\Inc\Backend\Meta_Save;
 use KaliForms\Inc\Backend\Notifications;
 use KaliForms\Inc\Backend\Plugin_Collision;
+use KaliForms\Inc\Backend\Plugin_Deactivation;
+use KaliForms\Inc\Backend\Plugin_Health_Checks;
+use KaliForms\Inc\Backend\Plugin_Review;
 use KaliForms\Inc\Backend\Posts\Forms;
 use KaliForms\Inc\Backend\Predefined_Forms;
 use KaliForms\Inc\Frontend\Form_Processor;
@@ -96,7 +101,23 @@ class KaliForms
         /**
          * Initiate the plugin collision class
          */
-        new Plugin_Collision();
+        $this->check_plugin_collision();
+        /**
+         * Start the plugin health checks ( for page /wp-admin/site-health.php )
+         */
+        new Plugin_Health_Checks();
+        /**
+         * Plugin review
+         */
+        new Plugin_Review();
+        /**
+         * Plugin deactivation
+         */
+        new Plugin_Deactivation();
+        /**
+         * Dashboard widgets;
+         */
+        new Dashboard_Widget();
         /**
          * Hook after the plugin constructor is ready
          * (Some parts of the plugin e.g. Hooks() may happen later)
@@ -130,5 +151,18 @@ class KaliForms
     public function install()
     {
         $first_install = new First_Install();
+    }
+
+    /**
+     * Checks plugin collision
+     *
+     * @return void
+     */
+    public function check_plugin_collision()
+    {
+        $collision = new Plugin_Collision();
+        if (count($collision->activated_plugins) > 0) {
+            $collision->set_notice();
+        }
     }
 }

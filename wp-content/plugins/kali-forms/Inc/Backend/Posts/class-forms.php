@@ -1,12 +1,15 @@
 <?php
 namespace KaliForms\Inc\Backend\Posts;
 
+use KaliForms\Inc\Backend\Form_Styles;
 use KaliForms\Inc\Backend\JS_Vars;
 use KaliForms\Inc\Backend\Meta_Save;
 use KaliForms\Inc\Backend\Notifications;
+use KaliForms\Inc\Backend\Views\Email_Settings_Page;
 use KaliForms\Inc\Backend\Views\Extensions_Page;
 use KaliForms\Inc\Backend\Views\Metaboxes\Form_Builder;
 use KaliForms\Inc\Frontend\Form_Shortcode;
+use KaliForms\Inc\Utils\Duplicate_Post;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -19,6 +22,7 @@ if (!defined('ABSPATH')) {
  */
 class Forms
 {
+    use Duplicate_Post;
     /**
      * Plugin slug
      *
@@ -50,8 +54,8 @@ class Forms
         add_action('admin_menu', [$this, 'register_submenus']);
         // Saves the metabox
         $this->metabox_save();
+        $this->init_duplicate_post();
     }
-
     /**
      * Registers the extensions submenu
      *
@@ -59,6 +63,14 @@ class Forms
      */
     public function register_submenus()
     {
+        add_submenu_page(
+            'edit.php?post_type=kaliforms_forms',
+            esc_html__('SMTP Settings', 'kaliforms'),
+            esc_html__('SMTP Settings', 'kaliforms'),
+            'manage_options',
+            'kaliforms-email-settings',
+            new Email_Settings_Page()
+        );
         add_submenu_page(
             'edit.php?post_type=kaliforms_forms',
             esc_html__('Extensions', 'kaliforms'),
@@ -224,12 +236,32 @@ class Forms
         $columns = array_merge(
             $columns,
             [
+                'theme' => esc_html__('Theme', 'kaliforms'),
                 'shortcode' => esc_html__('Shortcode', 'kaliforms'), 'date' => $date,
             ]
         );
         return $columns;
     }
+    /**
+     * Add a duplicate link to quick actions
+     *
+     * @param [type] $actions
+     * @param [type] $post
+     * @return void
+     */
+    public function add_duplicate_link($actions, $post)
+    {
+        if ($post->post_type === 'kaliforms_forms') {
+            $actions['kaliforms-duplicate'] = sprintf(
+                '<a href="#" data-post-id="%s" class="kaliforms-duplicate-form-link" id="kaliforms-duplicate-%s">%s</a>',
+                $post->ID,
+                $post->ID,
+                esc_html__('Duplicate form', 'kaliforms')
+            );
+        }
 
+        return $actions;
+    }
     /**
      * Edits custom column
      *
@@ -239,7 +271,17 @@ class Forms
      */
     public function edit_custom_column($column, $post_id)
     {
+        $form_styles = Form_Styles::get_instance();
         switch ($column) {
+            case 'theme':
+                echo '<div class="kaliforms-themes-formgroup">';
+                echo '<select data-form-id="' . $post_id . '" value="' . $form_styles->get_applied_form_style($post_id, 'theme') . '">';
+                foreach ($form_styles->styles as $style) {
+                    echo '<option value=' . $style['id'] . ' ' . selected($form_styles->get_applied_form_style($post_id, 'theme'), $style['id'], false) . '>' . $style['label'] . '</option>';
+                }
+                echo '</select>';
+                echo '</div>';
+                break;
             case 'shortcode':
                 echo '<div class="kaliform-shortcode-formgroup">';
                 echo '<input readonly type="text" value=\'[kaliform id="' . absint($post_id) . '"]\' />';
@@ -250,7 +292,18 @@ class Forms
                 break;
         }
     }
-
+    /**
+     * Gets the themes
+     *
+     * @return void
+     */
+    public function get_themes()
+    {
+        return [
+            'current' => 'dark',
+            'available' => [],
+        ];
+    }
     /**
      * Add fields for the cpt to save
      */
@@ -290,6 +343,7 @@ class Forms
          */
         $meta->add_fields(
             ['id' => 'show_thank_you_message', 'sanitize' => 'KaliForms\Inc\Backend\Sanitizers::sanitize_boolean'],
+            ['id' => 'save_form_submissions', 'sanitize' => 'KaliForms\Inc\Backend\Sanitizers::sanitize_boolean'],
             ['id' => 'thank_you_message', 'sanitize' => 'wp_kses_post'],
             ['id' => 'submission_message', 'sanitize' => 'wp_kses_post'],
             ['id' => 'redirect_url', 'sanitize' => 'esc_url']
@@ -314,8 +368,14 @@ class Forms
             ['id' => 'paypal_client_id', 'sanitize' => 'sanitize_text_field'],
             ['id' => 'paypal_client_id_sandbox', 'sanitize' => 'sanitize_text_field']
         );
-    }
 
+        /**
+         * Sanitizes the selected form style
+         */
+        $meta->add_field(
+            ['id' => 'selected_form_style', 'sanitize' => 'sanitize_text_field']
+        );
+    }
     /**
      * Register the shortcode so we can display it in the frontend
      *

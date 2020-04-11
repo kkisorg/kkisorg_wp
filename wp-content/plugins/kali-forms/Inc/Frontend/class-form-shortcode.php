@@ -2,6 +2,7 @@
 namespace KaliForms\Inc\Frontend;
 
 use KaliForms\Inc\Backend\Translations;
+use KaliForms\Inc\Utils\General_Placeholders_Helper;
 use KaliForms\Inc\Utils;
 
 if (!defined('ABSPATH')) {
@@ -65,6 +66,12 @@ class Form_Shortcode
      */
     public $load_grecaptcha = false;
     /**
+     * $args sent from the shortcode
+     *
+     * @var array
+     */
+    protected $args = [];
+    /**
      * Creates an instance of the form shortcode
      *
      * @param [Array] $args
@@ -88,6 +95,16 @@ class Form_Shortcode
             if ($field->id === 'grecaptcha') {
                 $this->load_grecaptcha = true;
             }
+
+            if (isset($field->properties->name) && isset($args[$field->properties->name])) {
+                $field->properties->default = $args[$field->properties->name];
+                $val = $field->properties->default;
+                if (substr($val, 0, 1) === '{' && substr($val, -1) === '}') {
+                    $val = substr($val, 1, -1);
+                    $field->properties->default = $this->shortcode_value($val);
+                }
+            }
+
             $this->fields[$field->internalId] = $field;
         }
 
@@ -96,7 +113,6 @@ class Form_Shortcode
         $this->load_grecaptcha_if_needed();
 
         apply_filters($this->slug . '_form_shortcode_init', $this);
-
         $form = new Form($args['id'], $this->rows, $this->get_form_info());
         $this->html = $form->render_fields();
     }
@@ -121,6 +137,7 @@ class Form_Shortcode
             'google_site_key' => $this->get('google_site_key', ''),
             'google_secret_key' => $this->get('google_secret_key', ''),
             'currency' => $this->get('currency', ''),
+            'form_style' => $this->get('selected_form_style', 'theme'),
         ]);
     }
 
@@ -205,5 +222,78 @@ class Form_Shortcode
     {
         $grid = json_decode($this->get('grid', '[]'));
         $this->walk_array($grid);
+    }
+
+    public function shortcode_value($val)
+    {
+        $str = '';
+
+        if (
+            in_array(
+                $val,
+                [
+                    'user_email',
+                    'first_name',
+                    'last_name',
+                    'user_login',
+                    'user_nicename',
+                    'user_url',
+                    'display_name',
+                ]
+            )
+            && is_user_logged_in()
+        ) {
+            $user = wp_get_current_user();
+            switch ($val) {
+                case 'user_email':
+                    $str = $user->get('user_email');
+                    break;
+                case 'first_name':
+                    $str = $user->get('first_name');
+                    break;
+                case 'last_name':
+                    $str = $user->get('last_name');
+                    break;
+                case 'user_login':
+                    $str = $user->get('user_login');
+                    break;
+                case 'user_nicename':
+                    $str = $user->get('user_nicename');
+                    break;
+                case 'user_url';
+                    $str = $user->get('user_url');
+                    break;
+                case 'display_name':
+                    $str = $user->get('display_name');
+                    break;
+                default:
+                    $str = '';
+                    break;
+            }
+        }
+
+        if (
+            in_array(
+                $val,
+                [
+                    'entryCounter',
+                    'formName',
+                ]
+            )
+        ) {
+            switch ($val) {
+                case 'entryCounter':
+                    $str = General_Placeholders_Helper::count_form_entries($this->post->ID);
+                    break;
+                case 'formName':
+                    $str = get_the_title($this->post);
+                    break;
+                default:
+                    $str = '';
+                    break;
+            }
+
+        }
+        return $str;
     }
 }

@@ -6,7 +6,7 @@
  * Plugin Name: MetaSlider
  * Plugin URI:  https://www.metaslider.com
  * Description: Easy to use slideshow plugin. Create SEO optimised responsive slideshows with Nivo Slider, Flex Slider, Coin Slider and Responsive Slides.
- * Version:     3.15.3
+ * Version:     3.16.2
  * Author:      Team Updraft
  * Author URI:  https://www.metaslider.com
  * License:     GPL-2.0+
@@ -32,7 +32,7 @@ class MetaSliderPlugin {
      *
      * @var string
      */
-    public $version = '3.15.3';
+    public $version = '3.16.2';
 
 	/**
      * Pro installed version number
@@ -255,7 +255,7 @@ class MetaSliderPlugin {
     private function setup_filters() {
         add_filter('media_upload_tabs', array($this, 'custom_media_upload_tab_name'), 998);
         add_filter('media_view_strings', array($this, 'custom_media_uploader_tabs'), 5);
-        add_filter('media_buttons_context', array($this, 'insert_metaslider_button'));
+        add_filter('media_buttons', array($this, 'insert_metaslider_button'));
         add_filter("plugin_row_meta", array($this, 'get_extra_meta_links'), 10, 4);
         add_action('admin_head', array($this, 'add_star_styles'));
 
@@ -443,15 +443,15 @@ class MetaSliderPlugin {
 
     }
 
-    /**
-     * Check our WordPress installation is compatible with MetaSlider
-     */
-    public function do_system_check() {
-
-        $systemCheck = new MetaSliderSystemCheck();
-        $systemCheck->check();
-
-    }
+	/**
+	 * Check our WordPress installation is compatible with MetaSlider
+	 * 
+	 * @param int $slideshow_id The current slideshow ID
+	 */
+	public function do_system_check($slideshow_id) {
+		$systemCheck = new MetaSliderSystemCheck($slideshow_id);
+		$systemCheck->check();
+	}
 
 
     /**
@@ -996,7 +996,7 @@ class MetaSliderPlugin {
 
                 // number input type
                 case 'number':
-                    $output .= "<tr class='{$row['type']}'><td class='tipsy-tooltip' title='{$helptext}'>{$row['label']}</td><td class='flex items-center justify-start'><input class='option {$row['class']} {$id}' type='number' min='{$row['min']}' max='{$row['max']}' step='{$row['step']}' name='settings[{$id}]' value='" . absint($row['value']) . "' /><span class='text-base ml-1 rtl:ml-0 rtl:mr-1'>{$row['after']}</span></td></tr>";
+                    $output .= "<tr class='{$row['type']}'><td class='tipsy-tooltip' title='{$helptext}'>{$row['label']}</td><td class='flex items-center justify-start'><input class='option {$row['class']} {$id} w-24' type='number' min='{$row['min']}' max='{$row['max']}' step='{$row['step']}' name='settings[{$id}]' value='" . absint($row['value']) . "' /><span class='text-base ml-1 rtl:ml-0 rtl:mr-1'>{$row['after']}</span></td></tr>";
                     break;
 
                 // select drop down
@@ -1107,9 +1107,9 @@ class MetaSliderPlugin {
             $this->set_slider($slider_id);
         }
         
-        $this->do_system_check();
-
 		$slider_id = $this->slider ? $this->slider->id : 0;
+
+		$this->do_system_check($slider_id);
 
 		if (metaslider_user_is_ready_for_notices()) {
 			echo $this->notices->do_notice(false, 'header', true);
@@ -1117,10 +1117,9 @@ class MetaSliderPlugin {
 
 		// Get the current theme if set
 		$theme = metaslider_themes::get_instance()->get_current_theme($slider_id);
-		if (is_array($theme)) unset($theme['images']);
-		$theme_error = is_wp_error($theme) ? $theme->get_error_message() : '';
-		$theme_id = is_wp_error($theme) ? false : $theme['folder'];
 		if (is_wp_error($theme)) $theme = false; 
+		if (is_array($theme)) unset($theme['images']);
+		$theme_id = isset($theme['folder']) ? $theme['folder'] : false;
 		
 		?>
         <div id="metaslider-ui" class="metaslider metaslider-ui min-h-screen p-0 pb-24 bg-gray-lightest">
@@ -1128,17 +1127,18 @@ class MetaSliderPlugin {
 			$slider_settings = get_post_meta($slider_id, 'ml-slider_settings', true);
 			$tour_position = get_option('metaslider_tour_cancelled_on');
 		?>
+
 		<metaslider
 			:id='<?php echo $slider_id; ?>'
-			v-bind:settings='<?php echo json_encode($slider_settings);?>'
+			v-bind:settings='<?php echo esc_attr(json_encode($slider_settings)); ?>'
 			tour-status="<?php echo $tour_position ? $tour_position : false ?>"
 			inline-template>
 			<span>
-			<form @keydown.enter.prevent="" id="ms-form-settings" accept-charset="UTF-8" action="<?php echo admin_url( 'admin-post.php'); ?>" method="post" :class="{ 'respect-ie11': isIE11 }">
+			<form @keydown.enter.prevent="" autocomplete="off" id="ms-form-settings" accept-charset="UTF-8" action="<?php echo admin_url( 'admin-post.php'); ?>" method="post" :class="{ 'respect-ie11': isIE11 }">
 				
 				<?php include METASLIDER_PATH."admin/views/pages/parts/toolbar.php"; ?>
 
-				<div class="container">
+				<div class="container px-6">
 				<?php 
 
 				// If there is no slideshow, show the start page and close out
@@ -1155,13 +1155,13 @@ class MetaSliderPlugin {
 					include METASLIDER_PATH."admin/old/navigation.php";
 				} ?>
 				<div v-if="current && current.hasOwnProperty('id')" id='poststuff' class="metaslider-inner wp-clearfix">
-					<div class="mt-10 mb-6">
+					<div class="my-6">
 						<?php if (metaslider_viewing_trashed_slides($this->slider->id)) { 
 							// If they are on the trash page, show them?>
 							<h3 class="flex float-left m-0 mr-2"><i><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></i> <?php _e('Trashed Slides', 'ml-slider'); ?></h3>
 							 <?php printf(__('<a href="%s">view active</a>', 'ml-slider'), admin_url("admin.php?page=metaslider&id={$this->slider->id}")); ?>
 						<?php } else { ?>
-							<h1 class="font-light text-2xl">{{ current.title }}</h1>
+							<metaslider-title></metaslider-title>
 						<?php } ?>
 					</div>
 
@@ -1303,14 +1303,6 @@ class MetaSliderPlugin {
                                                             )
                                                         ),
                                                     );
-													$aFields['title'] = array(
-														'type' => 'title',
-														'priority' => 5,
-														'class' => 'option flex nivo responsive coin',
-														'value' => get_the_title($this->slider->id),
-														'label' => __( "Title", "ml-slider" ),
-														'helptext' => __( "Slideshow title", "ml-slider" )
-													);
 
                                                     $aFields = apply_filters( 'metaslider_basic_settings', $aFields, $this->slider );
 
@@ -1334,8 +1326,7 @@ class MetaSliderPlugin {
 								</div>
 								<metaslider-theme-viewer
 									theme-directory-url="<?php echo METASLIDER_THEMES_URL; ?>"
-									incoming-error-message="<?php echo $theme_error; ?>">
-								</metaslider-theme-viewer>
+								></metaslider-theme-viewer>
 								
 								<?php include METASLIDER_PATH . "admin/views/pages/parts/shortcode.php"; ?>
 								
@@ -1648,34 +1639,26 @@ class MetaSliderPlugin {
         <?php
     }
 
-    /**
-     * Append the 'Add Slider' button to selected admin pages
-     *
-     * @param  string $context HTML being passed to amend HTML button
-     * @return string          HTML button
-     */
-    public function insert_metaslider_button($context) {
+	/**
+	 * Append the 'Add Slideshow' button to selected admin pages (classic editor)
+	 * Uses the media_buttons filter
+	 */
+	public function insert_metaslider_button() {
+		$capability = apply_filters('metaslider_capability', 'edit_others_posts');
+		if (!current_user_can($capability)) return;
 
-        $capability = apply_filters( 'metaslider_capability', 'edit_others_posts' );
+		global $pagenow;
+		if (!in_array($pagenow, array('post.php', 'page.php', 'post-new.php', 'post-edit.php'))) return;
 
-        if ( ! current_user_can( $capability ) ) {
-            return $context;
-        }
-
-        global $pagenow;
-
-        if ( in_array( $pagenow, array( 'post.php', 'page.php', 'post-new.php', 'post-edit.php' ) ) ) {
-            $context .= '<a href="#TB_inline?&inlineId=choose-meta-slider" class="thickbox button" title="' .
-                __( "Select slideshow to insert into post", "ml-slider" ) .
-                '"><span class="wp-media-buttons-icon" style="background: url(' . METASLIDER_ASSETS_URL .
-                '/metaslider/matchalabs.png); background-repeat: no-repeat; background-position: left bottom;"></span> ' .
-                __( "Add slider", "ml-slider" ) . '</a>';
-        }
-
-        return $context;
-
-    }
-
+		printf('
+			<a href="#TB_inline?&inlineId=choose-meta-slider" class="thickbox button" title="%s">
+				<span class="wp-media-buttons-icon"
+					style="background:url(%s/metaslider/matchalabs.png);background-repeat:no-repeat;background-position:left bottom;position: relative;top:-2px;right:-2px"></span>%s</a>',
+			__( "Select slideshow to insert into post", "ml-slider" ),
+			METASLIDER_ASSETS_URL,
+			__( "Add slideshow", "ml-slider" )
+		);
+	}
 
     /**
      * Append the 'Choose MetaSlider' thickbox content to the bottom of selected admin pages

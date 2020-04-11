@@ -13,7 +13,6 @@ Comment not being created when subject contains fomat or type. I.e. re: image//I
 
 Other
 Google Sign-In https://developers.google.com/identity/sign-in/web/sign-in
-Process single email at a time and don't delete unless successful
 detect links to embeddable content and remove anchor tag <a href="https://youtube.com?...">https://youtube.com</a>
 Add default comment status (like post status) wp_set_comment_status
 Test server port combination by opening a socket connection to see if any service responds. (via ajax call)

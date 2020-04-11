@@ -2,6 +2,7 @@
 
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'postie-config.class.php');
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'postie.class.php');
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'postie-message.php');
 
 /*
  * These are the only official public methods for accessing postie functionality
@@ -16,7 +17,9 @@ function lookup_category($trial_category, $category_match) {
 }
 
 function RemoveExtraCharactersInEmailAddress($address) {
-    return postie_RemoveExtraCharactersInEmailAddress($address);
+    $c = new PostieConfig();
+    $m = new PostieMessage(array(), $c->config_read());
+    return $m->get_clean_emailaddress($address);
 }
 
 function EchoError($v) {

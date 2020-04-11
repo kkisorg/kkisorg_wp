@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@material-ui/core/Button'
 import { sortableContainer } from 'react-sortable-hoc';
-
+import AddIcon from '@material-ui/icons/Add';
 /**
  * Addable list container
  *
@@ -20,7 +20,9 @@ const AddableListContainer = (props) => {
 		<div style={containerStyles}>
 			{props.children}
 
-			<Button onClick={() => props.addChoice()}>{KaliFormsObject.translations.general.addChoice}</Button>
+			<Button variant="contained" color="primary" style={{marginTop: 10}} onClick={() => props.addChoice()}>
+				<AddIcon /> {KaliFormsObject.translations.general.addChoice}
+			</Button>
 		</div>
 	);
 }

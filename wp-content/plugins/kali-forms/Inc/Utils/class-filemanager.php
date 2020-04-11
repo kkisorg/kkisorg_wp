@@ -100,6 +100,21 @@ trait FileManager
         // Do we need to filter extensions?
         // $this->_filter_extensions();
 
+        $obj = apply_filters(
+            $this->slug . '_before_file_upload',
+            [
+                'file' => $file,
+				'continue' => true,
+				'post' => $_POST,
+            ]
+		);
+
+        if (!$obj['continue']) {
+            wp_die(
+                wp_json_encode(['errors' => esc_html__('Something went wrong', 'kaliforms')])
+            );
+        }
+
         $id = media_handle_sideload($file, 0, sanitize_file_name($file['name']));
         if (is_wp_error($id)) {
             unlink($file['tmp_name']);

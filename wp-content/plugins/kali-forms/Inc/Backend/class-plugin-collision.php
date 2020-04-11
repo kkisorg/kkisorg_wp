@@ -32,8 +32,8 @@ class Plugin_Collision
         'formidable/formidable.php',
         'gravityforms/gravityforms.php',
         'ninja-forms/ninja-forms.php',
-		'wpforms-lite/wpforms.php',
-		'weforms/weforms.php'
+        'wpforms-lite/wpforms.php',
+        'weforms/weforms.php',
     ];
     /**
      * Activated plugins
@@ -41,6 +41,12 @@ class Plugin_Collision
      * @var array
      */
     public $activated_plugins = [];
+    /**
+     * Activated plugins by name
+     *
+     * @var array
+     */
+    public $activated_plugins_name = [];
     /**
      * Class constructor
      */
@@ -67,10 +73,6 @@ class Plugin_Collision
                 $this->activated_plugins_name[$p] = $plugins[$p]['Name'];
             }
         }
-
-        if (count($this->activated_plugins)) {
-            $this->set_notice();
-        }
     }
     /**
      * Create notifications
@@ -86,12 +88,14 @@ class Plugin_Collision
                 '<br/><br/> <a class="button button-primary" href="' . $this->create_url() . '">',
                 '</a>',
             ]);
+        $html .= '</p>';
 
         $notifications->add_notice(
             array(
                 'id' => $this->slug . '_plugin_colission',
                 'type' => 'notice notice-info',
                 'message' => $html,
+                'omit-pages' => ['site-health'],
             )
         );
     }
@@ -100,12 +104,19 @@ class Plugin_Collision
      *
      * @return void
      */
-    public function create_url()
+    public function create_url($health_check = false)
     {
         $data = [
             'plugins_queued' => array_keys($this->activated_plugins_name),
+            'redirect' => $health_check ? admin_url('site-health.php') : admin_url('plugins.php'),
         ];
-        return wp_nonce_url(
+        return $health_check
+        ? wp_nonce_url(
+            admin_url('site-health.php?') . http_build_query($data),
+            'kaliforms_deactivating_plugins',
+            'kaliforms_plugin_deactivation_queue'
+        )
+        : wp_nonce_url(
             admin_url('plugins.php?') . http_build_query($data),
             'kaliforms_deactivating_plugins',
             'kaliforms_plugin_deactivation_queue'
@@ -127,8 +138,9 @@ class Plugin_Collision
             return;
         }
 
-        $plugins = wp_unslash($_GET['plugins_queued']);
+		$plugins = wp_unslash($_GET['plugins_queued']);
+		$redirect = wp_unslash($_GET['redirect']);
         deactivate_plugins($plugins, true);
-        wp_redirect(admin_url('plugins.php'));
+        wp_redirect($redirect);
     }
 }

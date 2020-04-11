@@ -85,7 +85,8 @@ Class MetaSlider_Admin_Pages extends MetaSliderPlugin {
 		
 		// Register components and add support for the REST API / Admin AJAX
 		do_action('metaslider_register_admin_components');
-		wp_register_script('metaslider-admin-components', METASLIDER_ADMIN_URL . 'assets/js/app-' . sanitize_title(METASLIDER_VERSION) . '.js', array(), METASLIDER_VERSION, true);
+		$dev = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG;
+		wp_register_script('metaslider-admin-components', METASLIDER_ADMIN_URL . 'assets/js/app-' . sanitize_title(METASLIDER_VERSION) . ($dev ? '' : '.min') . '.js', array(), METASLIDER_VERSION, true);
 
 		// Check if rest is available
 		$is_rest_enabled = $this->is_rest_enabled();

@@ -151,7 +151,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 	private function unshare_network_snippet( $snippet_id ) {
 		$shared_snippets = get_site_option( 'shared_network_snippets', array() );
 
-		if ( ! in_array( $snippet_id, $shared_snippets ) ) {
+		if ( ! in_array( $snippet_id, $shared_snippets, true ) ) {
 			return;
 		}
 
@@ -202,7 +202,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 	 *
 	 * @return bool true if code produces errors
 	 */
-	private function validate_code( Code_Snippet $snippet ) {
+	private function test_code( Code_Snippet $snippet ) {
 
 		if ( empty( $snippet->code ) ) {
 			return false;
@@ -256,7 +256,14 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 
 		/* Deactivate snippet if code contains errors */
 		if ( $snippet->active && 'single-use' !== $snippet->scope ) {
-			if ( $code_error = $this->validate_code( $snippet ) ) {
+			$validator = new Code_Snippets_Validator( $snippet->code );
+			$code_error = $validator->validate();
+
+			if ( ! $code_error ) {
+				$code_error = $this->test_code( $snippet );
+			}
+
+			if ( $code_error ) {
 				$snippet->active = 0;
 			}
 		}
@@ -271,7 +278,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 				$shared_snippets = get_site_option( 'shared_network_snippets', array() );
 
 				/* Add the snippet ID to the array if it isn't already */
-				if ( ! in_array( $snippet_id, $shared_snippets ) ) {
+				if ( ! in_array( $snippet_id, $shared_snippets, true ) ) {
 					$shared_snippets[] = $snippet_id;
 					update_site_option( 'shared_network_snippets', array_values( $shared_snippets ) );
 				}
@@ -425,7 +432,7 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 			<h2 class="screen-reader-text"><?php _e( 'Sharing Settings', 'code-snippets' ); ?></h2>
 			<label for="snippet_sharing">
 				<input type="checkbox" name="snippet_sharing"
-					<?php checked( in_array( $snippet->id, $shared_snippets ) ); ?>>
+					<?php checked( in_array( $snippet->id, $shared_snippets, true ) ); ?>>
 				<?php esc_html_e( 'Allow this snippet to be activated on individual sites on the network', 'code-snippets' ); ?>
 			</label>
 		</div>
@@ -450,6 +457,12 @@ class Code_Snippets_Edit_Menu extends Code_Snippets_Admin_Menu {
 
 		if ( '' === $snippet->code ) {
 			return false;
+		}
+
+		$validator = new Code_Snippets_Validator( $snippet->code );
+
+		if ( $error = $validator->validate() ) {
+			return $error;
 		}
 
 		ob_start();

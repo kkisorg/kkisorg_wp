@@ -27,6 +27,8 @@ class SubmitButton extends Form_Field
      */
     public function render($item, $form_info)
     {
+		$item['class'] = 'input';
+
         $item['type'] = 'submit';
         $item['default'] = $item['caption'];
         $attributes = $this->generate_attribute_string($item);

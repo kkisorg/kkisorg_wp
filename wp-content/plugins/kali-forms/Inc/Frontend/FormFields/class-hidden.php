@@ -27,6 +27,8 @@ class Hidden extends Form_Field
      */
     public function render($item, $form_info)
     {
+		$item['class'] = 'input';
+
         $item['type'] = 'hidden';
         $attributes = $this->generate_attribute_string($item);
 

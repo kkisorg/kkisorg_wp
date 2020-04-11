@@ -214,19 +214,20 @@ function filter_RemoveSignature($content, $config) {
             DebugEcho("filter_RemoveSignature: no sig_pattern_list");
             return $content;
         }
-        //DebugEcho("looking for signature in: $content");
-
-        $pattern = '/^(' . implode('|', $config['sig_pattern_list']) . ')\s?$/miu';
-        DebugEcho("filter_RemoveSignature: pattern: $pattern");
+        DebugEcho("looking for signature in: $content");
 
         $html = $g_postie->load_html($content);
         if ($html !== false && $config['prefer_text_type'] == 'html') {
             DebugEcho("filter_RemoveSignature: html");
+            $pattern = '/>\s*(' . implode('|', $config['sig_pattern_list']) . ')/miu';
+            DebugEcho("filter_RemoveSignature: pattern: $pattern");
             filter_RemoveSignatureWorker($html->root, $pattern);
             //DebugEcho("filter_RemoveSignature: post worker: $html");
             $content = $html->save();
         } else {
             DebugEcho("filter_RemoveSignature: plain");
+            $pattern = '/^(' . implode('|', $config['sig_pattern_list']) . ')\s?$/miu';
+            DebugEcho("filter_RemoveSignature: pattern: $pattern");
             $arrcontent = explode("\n", $content);
             $strcontent = '';
 
@@ -251,9 +252,11 @@ function filter_RemoveSignature($content, $config) {
 function filter_RemoveSignatureWorker(&$html, $pattern) {
     $found = false;
     $matches = array();
-    if (preg_match($pattern, trim($html->plaintext), $matches)) {
+    $subject = trim($html);
+    $pm = preg_match($pattern, $subject, $matches);
+    if ($pm === 1) {
         $sig = trim($matches[1]);
-        DebugEcho("filter_RemoveSignatureWorker: signature '$sig' found in:\n" . trim($html));
+        DebugEcho("filter_RemoveSignatureWorker: signature '$sig' found in:\n" . $subject);
         //DebugDump($matches);
         $found = true;
         $i = stripos($html->innertext, $sig);
@@ -266,7 +269,10 @@ function filter_RemoveSignatureWorker(&$html, $pattern) {
             //DebugEcho("filter_RemoveSignatureWorker: signature not found: '$sig' " . strlen($sig));
         }
     } else {
-        DebugEcho("filter_RemoveSignatureWorker: no matches " . preg_last_error() . " '$pattern' $html");
+        if ($pm === false) {
+            DebugEcho('filter_RemoveSignatureWorker: preg_match error ' . preg_last_error());
+        }
+        DebugEcho("filter_RemoveSignatureWorker: no matches " . preg_last_error() . " '$pattern' $subject");
         //DebugDump($matches);
     }
 
@@ -459,8 +465,8 @@ function filter_ReplaceImagePlaceHolders($content, &$email, $config, $post_id, $
             'post_type' => 'attachment',
             'numberposts' => -1,
             'post_mime_type' => 'image',));
-        DebugEcho("filter_ReplaceImagePlaceHolders: images in post: " . count($images));
-        DebugDump($images);
+        //DebugEcho("filter_ReplaceImagePlaceHolders: images in post: " . count($images));
+        //DebugDump($images);
 
         $i = 0;
 

@@ -5,7 +5,6 @@ update date in docs\Changes.txt
 update Upgrade Notice in docs\Changes.txt
 update version number in docs\Postie.txt
 update version number in postie.php comment
-update version number in postie.php code
 
 run deploy.cmd
 commit

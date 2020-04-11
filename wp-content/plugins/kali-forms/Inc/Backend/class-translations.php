@@ -39,6 +39,16 @@ class Translations
      */
     public function set_general_translations()
     {
+        $this->translations['alerts'] = [
+            'duplicateFieldTitle' => esc_html__('Duplicate field', 'kaliforms'),
+            'duplcateFieldMessage' => esc_html__('Are you sure you want to duplicate this field?', 'kaliforms'),
+            'removeFieldTitle' => esc_html__('Remove field', 'kaliforms'),
+            'removeFieldMessage' => esc_html__('Are you sure you want to delete this field?', 'kaliforms'),
+            'removeEmailMessage' => esc_html__('Are you sure you want to delete this notification', 'kaliforms'),
+            'removeEmailTitle' => esc_html__('Remove notification', 'kaliforms'),
+            'duplicateEmailTitle' => esc_html__('Duplicate notification', 'kaliforms'),
+            'duplicateEmailMessage' => esc_html__('Are you sure you want to duplicate this notification', 'kaliforms'),
+        ];
         $this->translations['general'] = [
             'yes' => esc_html__('Yes', 'kaliforms'),
             'no' => esc_html__('No', 'kaliforms'),
@@ -50,7 +60,11 @@ class Translations
             'save' => esc_html__('Save', 'kaliforms'),
             'edit' => esc_html__('Edit', 'kaliforms'),
             'delete' => esc_html__('Delete', 'kaliforms'),
+            'duplicate' => esc_html__('Duplicate', 'kaliforms'),
             'addChoice' => esc_html__('Add choice', 'kaliforms'),
+            'defaultValue' => esc_html__('Default value', 'kaliforms'),
+            'checked' => esc_html__('Checked', 'kaliforms'),
+            'selected' => esc_html__('Selected', 'kaliforms'),
             'value' => esc_html__('Value', 'kaliforms'),
             'label' => esc_html__('Label', 'kaliforms'),
             'import' => esc_html__('Import', 'kaliforms'),
@@ -61,6 +75,9 @@ class Translations
             'actions' => esc_html__('Actions', 'kaliforms'),
             'loadTemplate' => esc_html__('Load template', 'kaliforms'),
             'upgradeToPro' => esc_html__('Upgrade to Pro', 'kaliforms'),
+            'ok' => esc_html__('OK', 'kaliforms'),
+            'cancel' => esc_html__('Cancel', 'kaliforms'),
+            'accessRestrictedField' => esc_html__("Unfortunately, you can't edit this field anymore. This field is part of the PRO package.", 'kaliforms'),
         ];
     }
 
@@ -103,21 +120,29 @@ class Translations
 
     public function backend()
     {
+        $this->translations['fieldPropertiesGroup'] = [
+            'general' => esc_html__('General', 'kaliforms'),
+            'addable' => esc_html__('Options', 'kaliforms'),
+            'advanced' => esc_html__('Advanced', 'kaliforms'),
+            'conditional' => esc_html__('Conditional', 'kaliforms'),
+        ];
         $this->translations['appBar'] = [
-            'backToWp' => esc_html__('Back to dashboard', 'kaliforms'),
+            'backToWp' => esc_html__('Close', 'kaliforms'),
             'formName' => esc_html__('Form name', 'kaliforms'),
             'formBuilder' => esc_html__('Builder', 'kaliforms'),
             'formSettings' => esc_html__('Settings', 'kaliforms'),
-            'emails' => esc_html__('Emails', 'kaliforms'),
+            'notifications' => esc_html__('Notifications', 'kaliforms'),
         ];
 
         $this->translations['sidebar'] = [
             'addYourFirstField' => esc_html__('Add your first form field!', 'kaliforms'),
+            'formStyling' => esc_html__('Form styling', 'kaliforms'),
             'formFields' => esc_html__('Form fields', 'kaliforms'),
             'fieldProperties' => esc_html__('Field properties', 'kaliforms'),
             'general' => esc_html__('General', 'kaliforms'),
             'integrations' => esc_html__('Integrations', 'kaliforms'),
             'emailSettings' => esc_html__('Email settings', 'kaliforms'),
+            'pleaseSelectAFieldToEdit' => esc_html__('Please select a field to edit', 'kaliforms'),
         ];
 
         $this->translations['builder'] = [
@@ -126,17 +151,32 @@ class Translations
         ];
 
         $this->translations['templateSelector'] = [
+            'title' => esc_html__('One-Click Forms', 'kaliforms'),
+            'blank' => esc_html__('Blank', 'kaliforms'),
+            'blankDescription' => esc_html__('Start a new form from scratch', 'kaliforms'),
             'placeholderTitle' => esc_html__('Select a pre-defined form', 'kaliforms'),
             'placeholderButton' => esc_html__('Or build one from scratch', 'kaliforms'),
+            'import' => esc_html__('Import this information for your form', 'kaliforms'),
+            'layout' => esc_html__('Layout', 'kaliforms'),
+            'emails' => esc_html__('Notifications', 'kaliforms'),
+            'settings' => esc_html__('Settings', 'kaliforms'),
+            'conditionalLogic' => esc_html__('Conditional logic', 'kaliforms'),
+            'style' => esc_html__('Apply a style', 'kaliforms'),
         ];
-
+        $this->translations['formStyling'] = [
+            'title' => esc_html__('Form styling', 'kaliforms'),
+            'useStyle' => esc_html__('Use style', 'kaliforms'),
+        ];
         $this->translations['formEmails'] = [
             'addEmail' => esc_html__('Add email', 'kaliforms'),
+            'selectEmail' => esc_html__('Please select an email from the list', 'kaliforms'),
             'removeEmail' => esc_html__('Remove email', 'kaliforms'),
+            'duplicateEmail' => esc_html__('Duplicate email', 'kaliforms'),
             'fromName' => esc_html__('From name', 'kaliforms'),
             'fromEmail' => esc_html__('From email', 'kaliforms'),
             'toEmail' => esc_html__('To email', 'kaliforms'),
             'replyTo' => esc_html__('Reply to', 'kaliforms'),
+            'emailBody' => esc_html__('Start typing...', 'kaliforms'),
             'ccEmail' => esc_html__('CC Email', 'kaliforms'),
             'bccEmail' => esc_html__('BCC Email', 'kaliforms'),
             'subject' => esc_html__('Email subject', 'kaliforms'),
@@ -146,6 +186,8 @@ class Translations
             'mediaAttachmentHelperText' => esc_html__('You can add multiple ids, separated by commas. e.g.: 1,3,5', 'kaliforms'),
             'fileUploadSelection' => esc_html__('Attach the file(s) from the following fields to this email:', 'kaliforms'),
             'pathToYourWpIs' => esc_html__('Path to your WordPress folder is:', 'kaliforms'),
+            'addEmailPlaceholder' => esc_html__('You currently do not have any emails configured.', 'kaliforms'),
+            'addEmailPlaceholderButton' => esc_html__('Add your first email!', 'kaliforms'),
         ];
 
         $this->translations['emailWizard'] = [
@@ -169,6 +211,7 @@ class Translations
             'multipleSelectionSeparator' => esc_html__('Multiple selection separator', 'kaliforms'),
             'removeCaptcha' => esc_html__('Remove captcha for logged user', 'kaliforms'),
             'showThankYou' => esc_html__('Show thank you message', 'kaliforms'),
+            'saveFormSubmissions' => esc_html__('Save form submissions', 'kaliforms'),
             'globalErrorMessage' => esc_html__('Global error message', 'kaliforms'),
             'hideFormName' => esc_html__('Hide form name', 'kaliforms'),
 
@@ -201,6 +244,8 @@ class Translations
             ),
             'add' => esc_html__('Add', 'kaliforms'),
             'currentField' => esc_html__('Current field', 'kaliforms'),
+            'should' => esc_html__('Should', 'kaliforms'),
+            'is' => esc_html__('Is', 'kaliforms'),
             'state' => esc_html__('State', 'kaliforms'),
             'ifThisField' => esc_html__('If this field', 'kaliforms'),
             'operator' => esc_html__('Operator', 'kaliforms'),
@@ -212,6 +257,7 @@ class Translations
             'equalTo' => esc_html__('Equal to', 'kaliforms'),
             'differentThan' => esc_html__('Different than', 'kaliforms'),
             'canBe' => esc_html__('Can be', 'kaliforms'),
+            'thisField' => esc_html__('This field', 'kaliforms'),
             'field' => esc_html__('Field', 'kaliforms'),
             'state' => esc_html__('State', 'kaliforms'),
             'conditionedBy' => esc_html__('Conditioned by', 'kaliforms'),
@@ -255,6 +301,8 @@ class Translations
             'siteUrl' => esc_html__('The WordPress address (URL) (set in Settings - General)', 'kaliforms'),
             'homeUrl' => esc_html__('The Site address (URL) (set in Settings - General)', 'kaliforms'),
             'adminEmail' => esc_html__('Admin email (set in Settings - General)', 'kaliforms'),
+            'entryCounter' => esc_html__('Show the current entry number', 'kaliforms'),
+            'formName' => esc_html__('Current form name', 'kaliforms'),
         ];
     }
 }

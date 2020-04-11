@@ -27,8 +27,16 @@ class TextArea extends Form_Field
      */
     public function render($item, $form_info)
     {
+        $item['class'] = 'input';
+
+        $editor = isset($item['changeToEditor']) && $item['changeToEditor'] ? true : false;
+        if ($editor) {
+            wp_enqueue_editor();
+        }
+        $item['rows'] = isset($item['rows']) ? $item['rows'] : 4;
+        $item['editor'] = $editor;
         $attributes = $this->generate_attribute_string($item);
-		$offset = isset($item['offset']) && $item['offset'] > 0 ? 'offset-md-' . absint($item['offset']) : '';
+        $offset = isset($item['offset']) && $item['offset'] > 0 ? 'offset-md-' . absint($item['offset']) : '';
         $div = '<div class="col-12 col-md-' . absint($item['col']) . ' ' . $offset . '">';
         $div .= $this->generate_label($item, $form_info);
         $div .= '<textarea ' . $attributes . '>' . esc_html($item['default']) . '</textarea>';

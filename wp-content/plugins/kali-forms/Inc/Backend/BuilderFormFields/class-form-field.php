@@ -83,27 +83,32 @@ abstract class Form_Field
             'id' => [
                 'label' => esc_html__('Field id', 'kaliforms'),
                 'type' => 'textbox',
-                'value' => $this->id,
+				'value' => $this->id,
+				'group' => 'advanced',
             ],
             'name' => [
                 'label' => esc_html__('Field name', 'kaliforms'),
                 'type' => 'textbox',
-                'value' => $this->id,
+				'value' => $this->id,
+				'group' => 'general'
             ],
             'caption' => [
                 'label' => esc_html__('Field caption/label', 'kaliforms'),
                 'type' => 'textbox',
-                'value' => '',
+				'value' => '',
+				'group' => 'general',
             ],
             'description' => [
                 'label' => esc_html__('Field description', 'kaliforms'),
                 'type' => 'textbox',
-                'value' => '',
+				'value' => '',
+				'group' => 'general',
             ],
             'default' => [
                 'label' => esc_html__('Default value', 'kaliforms'),
                 'type' => 'textbox',
-                'value' => '',
+				'value' => '',
+				'group' => 'advanced'
             ],
         ];
     }

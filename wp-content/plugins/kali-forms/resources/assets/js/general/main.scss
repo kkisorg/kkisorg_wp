@@ -7,9 +7,19 @@
     }
 }
 
+// .menu-icon-kaliforms_*,
+a[class^="menu-icon-kaliforms"],
+a[class*=" menu-icon-kaliforms"],
+.menu-icon-kaliforms_submitted,
 .menu-icon-kaliforms_forms {
     img {
         width: 18px;
+    }
+}
+
+#adminmenu .wp-submenu {
+    a[href$="kaliforms-extensions"] {
+        color: #FFA500;
     }
 }
 
@@ -27,8 +37,9 @@
         right: 0px;
         top: 2px;
         bottom: 2px;
-        background: #fff;
-        border-color: rgba(222, 222, 222, .75);
+        background: transparent;
+		border-color: transparent;
+		cursor:pointer;
     }
 }
 
@@ -236,5 +247,22 @@
                 }
             }
         }
+    }
+}
+
+#kaliforms_dashboard_widget {
+    .inside {
+        padding-top: 15px;
+        padding-bottom: 30px;
+    }
+
+    .action-buttons {
+        text-align: center;
+    }
+
+    img {
+        display: block;
+        width: 280px;
+        margin: 0 auto;
     }
 }

@@ -2,23 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@material-ui/core/Grid'
 import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
-import connect from 'react-redux/es/connect/connect';
-import { bindActionCreators } from 'redux';
-import * as StoreActions from '../../store/actions';
 import OwnerConditional from './OwnerConditional';
-
-const mapStateToProps = state => {
-	return {
-		loading: state.PageLoading,
-		fieldComponents: state.FieldComponents,
-		fieldComponentsHash: state.FieldComponentsHash,
-		formFieldEditor: state.FormFieldEditor,
-	};
-};
-
-const mapDispatchToProps = dispatch => {
-	return bindActionCreators(StoreActions, dispatch);
-};
 
 const OwnerSelection = (props) => {
 	const [conditional, setConditional] = useState(props.conditionalOwner);
@@ -118,7 +102,6 @@ const OwnerSelection = (props) => {
 							addCondition={addCondition}
 							setDefaultCondition={setDefaultCondition}
 							conditionalLength={conditional.length}
-							fieldComponents={props.fieldComponents}
 						/>
 					))
 				}
@@ -127,4 +110,4 @@ const OwnerSelection = (props) => {
 	);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OwnerSelection);
+export default OwnerSelection;

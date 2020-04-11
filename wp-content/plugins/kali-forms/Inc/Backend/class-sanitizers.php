@@ -37,6 +37,19 @@ class Sanitizers
         return filter_var($input, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
     }
 
+    public static function sanitize_regular_checkbox($input)
+    {
+        return $input === 'on';
+    }
+
+    public static function sanitize_secure_options($input)
+    {
+        $val = sanitize_text_field($input);
+        $allowed = ['None', 'SSL', 'TLS', 'STARTTLS'];
+
+        return in_array($val, $allowed) ? $val : $allowed[0];
+    }
+
     /**
      * @param $input
      *

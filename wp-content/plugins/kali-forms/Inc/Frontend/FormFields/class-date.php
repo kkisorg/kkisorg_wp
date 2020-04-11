@@ -27,6 +27,8 @@ class Date extends Form_Field
      */
     public function render($item, $form_info)
     {
+		$item['class'] = 'input';
+
         $attributes = $this->generate_attribute_string($item);
 
         $offset = isset($item['offset']) && $item['offset'] > 0 ? 'offset-md-' . absint($item['offset']) : '';

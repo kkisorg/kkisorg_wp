@@ -46,47 +46,58 @@ window.jQuery(function($) {
 		}
 	}
         
-        /**
-         * UI for adding a slide. Managed through the WP media upload UI
-         * Event managed here.
-         */
-        var create_slides = window.create_slides = wp.media.frames.file_frame = wp.media({
-            multiple: 'add',
-            frame: 'post',
-            library: {type: 'image'}
-        });
-        create_slides.on('insert', function() {
-            
-            var slide_ids = [];
-            create_slides.state().get('selection').map(function(media) {
-                slide_ids.push(media.toJSON().id);
-			});
+	/**
+	 * UI for adding a slide. Managed through the WP media upload UI
+	 * Event managed here.
+	 */
+	var create_slides = window.create_slides = wp.media.frames.file_frame = wp.media({
+		multiple: 'add',
+		frame: 'post',
+		library: {type: 'image'},
+	});
 
-			APP && APP.notifyInfo('metaslider/creating-slides', APP.sprintf(
-				APP._n('Preparing %s slide...', 'Preparing %s slides...', slide_ids.length, 'ml-slider'), 
-				slide_ids.length
-			), true)
-			
-			// Remove the events for image APIs
-			remove_image_apis()
-    
-            var data = {
-                action: 'create_image_slide',
-                slider_id: window.parent.metaslider_slider_id,
-                selection: slide_ids,
-                _wpnonce: metaslider.create_slide_nonce
-            };
+	// Remove unwanted image views
+	var whiteList = ['insert', 'iframe'];
+	var unwanted_media_menu_items = create_slides.states.models.filter(function(view) {
+		var title = view.id;
+		
+		// Filter through the list and determine which elements to remove
+		return !whiteList.filter(function(term) { return title.includes(term) }).length;
+	})
+	create_slides.states.remove(unwanted_media_menu_items);
 
-            // TODO: Create micro feedback to the user. 
-            // TODO: Adding lots of slides locks up the page due to 'resizeSlides' event
-            $.ajax({
-                url: metaslider.ajaxurl, 
-                data: data,
-                type: 'POST',
-                error: function(error) {    
-					APP && APP.notifyError('metaslider/slide-create-failed', error.responseJSON, true)
-                },
-                success: function(response) {
+	create_slides.on('insert', function() {
+		
+		var slide_ids = [];
+		create_slides.state().get('selection').map(function(media) {
+			slide_ids.push(media.toJSON().id);
+		});
+
+		APP && APP.notifyInfo('metaslider/creating-slides', APP.sprintf(
+			APP._n('Preparing %s slide...', 'Preparing %s slides...', slide_ids.length, 'ml-slider'), 
+			slide_ids.length
+		), true)
+		
+		// Remove the events for image APIs
+		remove_image_apis()
+
+		var data = {
+			action: 'create_image_slide',
+			slider_id: window.parent.metaslider_slider_id,
+			selection: slide_ids,
+			_wpnonce: metaslider.create_slide_nonce
+		};
+
+		// TODO: Create micro feedback to the user. 
+		// TODO: Adding lots of slides locks up the page due to 'resizeSlides' event
+		$.ajax({
+			url: metaslider.ajaxurl, 
+			data: data,
+			type: 'POST',
+			error: function(error) {    
+				APP && APP.notifyError('metaslider/slide-create-failed', error, true)
+			},
+			success: function(response) {
 
 				// Mount and render each new slide
 				response.data.forEach(function(slide) {
@@ -102,11 +113,18 @@ window.jQuery(function($) {
 						}).$mount()).$el
 					)
 				})
-				APP && APP.notifySuccess('metaslider/slides-created', APP.sprintf(
-					APP._n('%s slide added successfully', '%s slides added successfully', slide_ids.length, 'ml-slider'),
-					slide_ids.length
-				), true)
-				APP && APP.triggerEvent('metaslider/save')
+
+				// Add timeouts to give some breating room to the notice animations
+				setTimeout(function() {
+					APP && APP.notifySuccess('metaslider/slides-created', APP.sprintf(
+						APP._n('%s slide added successfully', '%s slides added successfully', slide_ids.length, 'ml-slider'),
+						slide_ids.length
+					), true)
+					setTimeout(function() {
+						APP && APP.triggerEvent('metaslider/save')
+					}, 1000);
+				}, 1000);
+
 			}
 		})
 	})
@@ -129,6 +147,11 @@ window.jQuery(function($) {
 		// TODO: when converted to vue component make this work for other languages
 		$('.media-menu a:contains("Media Library")').remove()
 		add_image_apis()
+
+		// Remove unwanted side menu items
+		unwanted_media_menu_items.forEach(function (item) {
+			$('#menu-item-' + item.id).remove();
+		})
 	})
 	APP && create_slides.on('open', function() {
 		APP.notifyInfo('metaslider/add-slide-opening-ui', APP.__('Opening add slide UI...', 'ml-slider'))
@@ -244,7 +267,7 @@ window.jQuery(function($) {
                     data: data,
                     type: 'POST',
                     error: function(error) {    
-						APP && APP.notifyError('metaslider/slide-update-failed', error.responseJSON, true)
+						APP && APP.notifyError('metaslider/slide-update-failed', error, true)
                     },
                     success: function(response) {
                        /**

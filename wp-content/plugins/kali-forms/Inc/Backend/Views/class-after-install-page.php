@@ -60,7 +60,7 @@ class After_Install_Page
         $str .= '<p>' . esc_html__('Meet Kali Forms. The powerful & user-friendly WordPress form plugin. Easily create powerful contact forms, payment forms, feedback forms and more for your website without the hassle.', 'kaliforms') . '</p>';
         $str .= '<p><a href="' . admin_url() . 'post-new.php?post_type=kaliforms_forms
 " class="button button-primary">' . esc_html__('Create your first form', 'kaliforms') . '</a><a href="https://kaliforms.com/docs?utm_source=welcomeBanner&utm_campaign=userInterests&utm_medium=button
-" class="button">' . esc_html__('Read the docs', 'kaliforms') . '</a></p>';
+" class="button" target="_blank">' . esc_html__('Read the docs', 'kaliforms') . '</a></p>';
         $str .= '</div>';
 
         return $str;
@@ -72,7 +72,7 @@ class After_Install_Page
         $str .= '<p>' . vsprintf(esc_html__('If you have any questions about Kali Forms, what features are available or how to get started – feel free to get in touch with us using the form from our %1$sContact Page%2$s.', 'kaliforms'), ['<a href="https://www.kaliforms.com/contact-us?utm_source=welcomeBanner&utm_campaign=userInterests&utm_medium=button" target="_blank">', '</a>']) . '</p>';
         $str .= '<p style="text-align:center"><a href="' . admin_url() . 'post-new.php?post_type=kaliforms_forms
 " class="button button-primary">' . esc_html__('Create your first form', 'kaliforms') . '</a><a href="https://kaliforms.com/docs?utm_source=welcomeBanner&utm_campaign=userInterests&utm_medium=button
-" class="button">' . esc_html__('Upgrade to PRO', 'kaliforms') . '</a></p>';
+" target="_blank" class="button">' . esc_html__('Upgrade to PRO', 'kaliforms') . '</a></p>';
         $str .= '</div>';
         return $str;
     }
@@ -153,7 +153,7 @@ class After_Install_Page
             $str .= '</div>';
         }
         $str .= '</div>';
-        $str .= '<div class="row justify-center"> <p> <a href="https://kaliforms.com/pricing?utm_source=welcomeBanner&utm_campaign=userInterests&utm_medium=button" class="button button-primary">' . esc_html__('Upgrade to PRO', 'kaliforms') . '</a></p></div>';
+        $str .= '<div class="row justify-center"> <p> <a href="https://kaliforms.com/pricing?utm_source=welcomeBanner&utm_campaign=userInterests&utm_medium=button" class="button button-primary" target="_blank">' . esc_html__('Upgrade to PRO', 'kaliforms') . '</a></p></div>';
 
         $str .= '</div>';
         return $str;
@@ -227,7 +227,7 @@ class After_Install_Page
             $str .= '</div>';
         }
         $str .= '</div>';
-        $str .= '<div class="row justify-center"> <p> <a href="https://kaliforms.com?utm_source=welcomeBanner&utm_campaign=userInterests&utm_medium=button" class="button">' . esc_html__('Read More', 'kaliforms') . '</a></p></div>';
+        $str .= '<div class="row justify-center"> <p> <a href="https://kaliforms.com?utm_source=welcomeBanner&utm_campaign=userInterests&utm_medium=button"  target="_blank" class="button">' . esc_html__('Read More', 'kaliforms') . '</a></p></div>';
         $str .= '</div>';
         return $str;
     }

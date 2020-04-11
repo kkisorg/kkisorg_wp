@@ -12,7 +12,10 @@ trait FieldsHelper
     public function construct_object($type)
     {
         $types = [
-            'textbox' => 'KaliForms\Inc\Frontend\FormFields\Textbox',
+			'textbox' => 'KaliForms\Inc\Frontend\FormFields\Textbox',
+			'telephone' => 'KaliForms\Inc\Frontend\FormFields\Telephone',
+			'email' => 'KaliForms\Inc\Frontend\FormFields\Email',
+			'url' => 'KaliForms\Inc\Frontend\FormFields\URL',
             'textarea' => 'KaliForms\Inc\Frontend\FormFields\Textarea',
             'dropdown' => 'KaliForms\Inc\Frontend\FormFields\Dropdown',
             'radio' => 'KaliForms\Inc\Frontend\FormFields\Radio',
@@ -47,6 +50,10 @@ trait FieldsHelper
 
         if (isset($item['smartOutput'])) {
             // $placeholders = $this->get_strings_between($value, '{', '}');
+        }
+
+        if ($item['type'] === 'checkbox') {
+            $value = explode(',', $value);
         }
 
         return $value;
@@ -95,15 +102,17 @@ trait FieldsHelper
      */
     public function generate_attribute_string($args)
     {
-        $string = '';
+		$string = '';
         foreach ($args as $attribute => $value) {
             switch ($attribute) {
                 case 'id':
                 case 'name':
                 case 'type':
                 case 'placeholder':
-                case 'for':
-                case 'multipleSeparator':
+				case 'for':
+				case 'class':
+				case 'multipleSeparator':
+				case 'rows':
                     $string .= empty($value) ? '' : ' ' . esc_attr($attribute) . '="' . esc_attr($value) . '"';
                     break;
                 case 'grid_id';
@@ -128,7 +137,8 @@ trait FieldsHelper
                 case 'addableItems':
                 case 'removableItems':
                 case 'minDateToday':
-                case 'multiple':
+				case 'multiple':
+				case 'editor':
                     $string .= $value ? esc_attr($attribute) . ' ' : '';
                     break;
                 case 'smartOutput':
@@ -170,7 +180,7 @@ trait FieldsHelper
         }
         if (empty($args['required'])) {
             $args['required'] = false;
-        }
+		}
 
         $string .= '<label ' . $this->generate_attribute_string(['for' => $args['id']]) . '>';
         $string .= $args['caption'];

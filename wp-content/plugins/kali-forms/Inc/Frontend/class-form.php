@@ -93,6 +93,10 @@ class Form
         if (!$item) {
             return false;
         }
+        if (!isset($item['frontend'])) {
+            return false;
+        }
+
         return $item['frontend']->render($item, $this->form_info);
     }
 
@@ -103,10 +107,65 @@ class Form
      */
     public function generate_form_attributes()
     {
+        $availableThemes = [
+            'rounded-borders',
+            'straight-borders',
+            'input-with-bg',
+            'no-shadows',
+            'border-bottom',
+            'no-borders',
+            'dark no-shadows',
+            'input-label-merge',
+            'input-label-merge-overlap',
+        ];
+
+        $obj = [
+            'classes' => '',
+            'style' => '',
+        ];
+
+        switch ($this->form_info['form_style']) {
+            case 'dark':
+                $obj['classes'] = 'straight-borders no-shadows dark';
+                break;
+            case 'roundedBorders':
+                $obj['classes'] = 'rounded-borders';
+                break;
+            case 'roundedBordersBg':
+                $obj['classes'] = 'rounded-borders input-with-bg';
+                break;
+            case 'straightBorders':
+                $obj['classes'] = 'straight-borders';
+                break;
+            case 'straightBordersBg':
+                $obj['classes'] = 'straight-borders input-with-bg';
+                break;
+            case 'inputBg':
+                $obj['classes'] = 'input-with-bg no-borders no-shadows';
+                break;
+            case 'inputBgRounded';
+                $obj['classes'] = 'input-with-bg no-borders rounded-borders';
+                break;
+            case 'borderBottom':
+                $obj['classes'] = 'only-bottom-border';
+                break;
+            case 'inputLabelMerge':
+                $obj['classes'] = 'input-label-merge';
+                $obj['style'] = 'inputLabelMerge';
+                break;
+            case 'inputLabelMergeOverlap':
+                $obj['classes'] = 'input-label-merge-overlap';
+                $obj['style'] = 'inputLabelMergeOverlap';
+                break;
+            default:
+                break;
+        }
+
         $arr = [
-            'class' => 'kaliforms-form-container bootstrap-wrapper ' . $this->form_info['css_class'],
+            'class' => 'kaliforms-form-container bootstrap-wrapper ' . $obj['classes'] . ' ' . $this->form_info['css_class'],
             'id' => $this->form_info['css_id'],
             'data-form-id' => $this->form_id,
+            'data-form-style' => $obj['style'],
         ];
 
         $arr = array_filter($arr);
@@ -120,6 +179,7 @@ class Form
                 case 'class':
                 case 'id':
                 case 'data-form-id':
+                case 'data-form-style':
                     $string .= empty($value) ? '' : ' ' . esc_attr($attribute) . '="' . esc_attr($value) . '"';
                     break;
                 case 'novalidate':
@@ -142,11 +202,11 @@ class Form
         return '<input type="hidden" name="ip_address" readonly value="' . $this->get_user_ip_addr() . '" />';
     }
 
-	/**
-	 * Get user ip address
-	 *
-	 * @return string
-	 */
+    /**
+     * Get user ip address
+     *
+     * @return string
+     */
     public function get_user_ip_addr()
     {
         $ipaddress = '';
